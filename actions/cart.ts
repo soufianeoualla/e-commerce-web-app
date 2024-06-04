@@ -53,11 +53,12 @@ export const addtoCart = async (
   });
 
   const totalQuantity = cart.cartItems.reduce(
-    (acc, val) => acc + val.quantity,
+    (acc, val) => acc + (val.quantity || 0),
     0
   );
+
   const totalAmount = cart.cartItems.reduce(
-    (acc, val) => acc + val.quantity * val.product.price,
+    (acc, val) => acc + (val.quantity || 0) * (val.product.price || 0),
     0
   );
 
@@ -118,6 +119,7 @@ export const handleCartItemQuantity = async (
         quantity: cartItem.quantity - 1,
       },
     });
+    
     await db.cart.update({
       where: {
         id: cart?.id,

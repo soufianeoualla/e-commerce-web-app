@@ -43,7 +43,7 @@ export const CartSheet = () => {
           <SheetTitle>Cart ({quantity}) </SheetTitle>
         </SheetHeader>
         <div className="space-y-4">
-          {cartItems.map((cartItem) => (
+          {cartItems?.map((cartItem) => (
             <CartProductCard
               cartItem={cartItem}
               key={cartItem.productId}

@@ -9,8 +9,9 @@ export async function POST(req: Request) {
     const body = await req.text();
     const signature = headers().get("stripe-signature");
     if (!signature) {
-      return new Response("invalid signature", { status: 400 });
+      return new Response("Invalid signature", { status: 400 });
     }
+
     const event = stripe.webhooks.constructEvent(
       body,
       signature,
@@ -37,23 +38,23 @@ export async function POST(req: Request) {
           isPaid: true,
           ShippingAddress: {
             create: {
-              fullName: session.customer_details?.name!,
-              city: shippingAddress?.city!,
-              country: shippingAddress?.country!,
-              state: shippingAddress?.state!,
-              streetAddress: shippingAddress?.line1!,
-              zipCode: shippingAddress?.postal_code!,
-              email: session.customer_details?.email!,
+              fullName: session.customer_details?.name || "N/A",
+                city: shippingAddress?.city || "N/A",
+                country: shippingAddress?.country || "N/A",
+                state: shippingAddress?.state || "N/A",
+                streetAddress: shippingAddress?.line1 || "N/A",
+                zipCode: shippingAddress?.postal_code || "N/A",
+                email: session.customer_details?.email!,
             },
           },
           BillingAddress: {
             create: {
-              fullName: session.customer_details?.name!,
-              city: billingAddress?.city!,
-              country: billingAddress?.country!,
-              state: billingAddress?.state!,
-              streetAddress: billingAddress?.line1!,
-              zipCode: billingAddress?.postal_code!,
+              fullName: session.customer_details?.name || "N/A",
+              city: billingAddress?.city || "N/A",
+              country: billingAddress?.country || "N/A",
+              state: billingAddress?.state || "N/A",
+              streetAddress: billingAddress?.line1 || "N/A",
+              zipCode: billingAddress?.postal_code || "N/A",
               email: session.customer_details?.email!,
             },
           },

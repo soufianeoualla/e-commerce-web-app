@@ -19,27 +19,27 @@ export default auth(async (req, res) => {
   const isAdminRoute = nextUrl.pathname.startsWith(adminRoute);
   const isProfileRoute = nextUrl.pathname.startsWith(profileRoute);
 
-  if (isApiRoute) {
-    return;
-  }
-
-  if (!isLoggedIn && !isPublicRoute && !isAuthRoute) {
-    return Response.redirect(new URL("/auth/login", nextUrl));
-  }
-
-  if (isAuthRoute && isLoggedIn) {
-    return Response.redirect(new URL(DEFAULT_REDIRECT_LINK, nextUrl));
-  }
-
-  // if (isAdminRoute && !isAdmin) {
-  //   return Response.redirect(new URL("/", nextUrl));
+  // if (isApiRoute) {
+  //   return;
   // }
 
-  if (isProfileRoute && !isLoggedIn) {
-    return Response.redirect(new URL("/auth/login", nextUrl));
-  }
+  // if (!isLoggedIn && !isPublicRoute && !isAuthRoute) {
+  //   return Response.redirect(new URL("/auth/login", nextUrl));
+  // }
 
-  return;
+  // if (isAuthRoute && isLoggedIn) {
+  //   return Response.redirect(new URL(DEFAULT_REDIRECT_LINK, nextUrl));
+  // }
+
+  // // if (isAdminRoute && !isAdmin) {
+  // //   return Response.redirect(new URL("/", nextUrl));
+  // // }
+
+  // if (isProfileRoute && !isLoggedIn) {
+  //   return Response.redirect(new URL("/auth/login", nextUrl));
+  // }
+
+  // return;
 });
 
 export const config = {
