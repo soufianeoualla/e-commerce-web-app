@@ -1,6 +1,6 @@
 "use client";
 import Filters from "./Filters";
-import { Loader, X } from "lucide-react";
+import { X } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -10,21 +10,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ProductsList } from "../(HomePage)/ProductsList";
-import { Product } from "@prisma/client";
-import {  useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getProductBySearch } from "@/db/queries";
 import { useSearchParams } from "next/navigation";
 import { colors, sizes } from "@/lib/utils";
 import { getAllProducts } from "@/db/queries";
+import { SingleProduct } from "@/lib/interfaces";
 
 export const PageWrapper = () => {
-  const [allProducts, setallProducts] = useState<Product[] | null>();
+  const [allProducts, setallProducts] = useState<SingleProduct[] | null>();
   const [categories, setCategories] = useState<string[]>([]);
   const [color, setColor] = useState<number | undefined>(undefined);
   const [size, setSize] = useState<number | undefined>(undefined);
   const [values, setValues] = useState<[number, number]>([5, 300]);
   const [sort, setSort] = useState<string>("");
-  const [queriedProduct, setqueriedProduct] = useState<Product[] | null>();
+  const [queriedProduct, setqueriedProduct] = useState<
+    SingleProduct[] | null
+  >();
   const deleteCategoryFilter = (index: number) => {
     setCategories(categories.filter((item, i) => i !== index));
   };
@@ -42,45 +44,51 @@ export const PageWrapper = () => {
     getData();
   }, [title]);
 
-    const products = useMemo(() => queriedProduct || allProducts || [], [queriedProduct, allProducts]);
+  const products = useMemo(
+    () => queriedProduct || allProducts || [],
+    [queriedProduct, allProducts]
+  );
 
-    const filteredProducts = useMemo(() => {
-      return products.filter((product) => {
-        const matchesCategory =
-          categories.length === 0 || categories.some((category) => product.categories.includes(category));
-        const matchesColor = color === undefined || product.colors.includes(colors[color].hexCode);
-        const matchesSize = size === undefined || product.sizes.includes(sizes[size].title);
-        const matchesPrice = values[0] <= product.price && product.price <= values[1];
-  
-        return matchesCategory && matchesColor && matchesSize && matchesPrice;
-      });
-    }, [products, categories, color, size, values]);
-  
-    const sortedProducts = useMemo(() => {
-      return sort
-        ? filteredProducts.slice().sort((a, b) => {
-            if (sort === "asc") {
-              return a.price - b.price;
-            } else {
-              return b.price - a.price;
-            }
-          })
-        : filteredProducts;
-    }, [filteredProducts, sort]);
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      const matchesCategory =
+        categories.length === 0 ||
+        categories.some((category) => product.categories.includes(category));
+      const matchesColor =
+        color === undefined || product.colors.includes(colors[color].hexCode);
+      const matchesSize =
+        size === undefined || product.sizes.includes(sizes[size].title);
+      const matchesPrice =
+        values[0] <= product.price && product.price <= values[1];
 
-   
+      return matchesCategory && matchesColor && matchesSize && matchesPrice;
+    });
+  }, [products, categories, color, size, values]);
+
+  const sortedProducts = useMemo(() => {
+    return sort
+      ? filteredProducts.slice().sort((a, b) => {
+          if (sort === "asc") {
+            return a.price - b.price;
+          } else {
+            return b.price - a.price;
+          }
+        })
+      : filteredProducts;
+  }, [filteredProducts, sort]);
+
   return (
     <div className="flex items-start gap-x-8 mb-32">
-        <Filters
-          setColor={setColor}
-          color={color}
-          setSize={setSize}
-          size={size}
-          categories={categories!}
-          setCategories={setCategories!}
-          setValues={setValues}
-          values={values}
-        />
+      <Filters
+        setColor={setColor}
+        color={color}
+        setSize={setSize}
+        size={size}
+        categories={categories!}
+        setCategories={setCategories!}
+        setValues={setValues}
+        values={values}
+      />
 
       <div className="py-2 w-full ">
         <b className=" text-neutral-black">Applied Filters:</b>
@@ -104,17 +112,17 @@ export const PageWrapper = () => {
               ? `Showing 1-9 of ${sortedProducts.length} results.`
               : `Showing 1-${sortedProducts.length} of ${sortedProducts.length} results.`}
           </p>
-            <Select onOpenChange={(value) => setSort(value)}>
-              <SelectTrigger className="w-[150px]  border-none  text-neutral-black font-medium">
-                <SelectValue placeholder="Sort By Price" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="asc">Price: ASC</SelectItem>
-                  <SelectItem value="desc">Price: DESC</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+          <Select onValueChange={(value) => setSort(value)}>
+            <SelectTrigger className="w-[150px]  border-none  text-neutral-black font-medium">
+              <SelectValue placeholder="Sort By Price" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="asc">Price: ASC</SelectItem>
+                <SelectItem value="desc">Price: DESC</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
         <ProductsList products={sortedProducts} classname="py-4 gap-9" />
       </div>

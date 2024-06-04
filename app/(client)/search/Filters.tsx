@@ -1,7 +1,7 @@
 "use client";
 import { getAllCategories } from "@/db/queries";
 import { cn, colors, sizes } from "@/lib/utils";
-import { category } from "@prisma/client";
+import { Category } from "@prisma/client";
 import { Check } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { PriceSlider } from "./PriceSlider";
@@ -27,7 +27,7 @@ const Filters = ({
   setValues,
   values,
 }: Props) => {
-  const [categoriesData, setCategoriesData] = useState<category[]>();
+  const [categoriesData, setCategoriesData] = useState<Category[]>();
 
   useEffect(() => {
     const getData = async () => {

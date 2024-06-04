@@ -18,7 +18,7 @@ export const ProductCategory = () => {
 
       if (products) {
         setProducts(
-          products.sort((a, b) => b.added_at.getTime() - a.added_at.getTime())
+          products.sort((a, b) => b.addedAt.getTime() - a.addedAt.getTime())
         );
       }
     };

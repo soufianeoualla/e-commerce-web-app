@@ -30,7 +30,12 @@ export const createCheckoutSession = async () => {
   } else {
     order = await db.order.create({
       data: {
-        cartId: cart.id,
+        orderItems:{
+          create: cart.cartItems.map(item => ({
+            productId: item.productId,
+            quantity: item.quantity,
+          })),
+        },
         userId: user?.id!,
         amount: totalPrice,
       },

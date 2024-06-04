@@ -131,8 +131,8 @@ model Order {
   user              User            @relation(fields: [userId], references: [id])
   amount            Float
   isPaid            Boolean         @default(false)
-  ShippingAddress   ShippingAddress @relation(fields: [shippingAddressId], references: [id])
-  shippingAddressId Int
+  ShippingAddress   ShippingAddress? @relation(fields: [shippingAddressId], references: [id])
+  shippingAddressId Int?
   orderItems        OrderItem[]
   BillingAddress    BillingAddress? @relation(fields: [billingAddressId], references: [id])
   billingAddressId  Int?

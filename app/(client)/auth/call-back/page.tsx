@@ -13,17 +13,13 @@ const Page = () => {
 
   useEffect(() => {
     if (status === "unauthenticated") return;
-    if (!cart.products || cart.products.length === 0) {
+    if (!cart.cartItems || cart.cartItems.length === 0) {
       return router.push("/");
     }
 
-    cart.products.forEach(async (product) => {
-      await addtoCart(
-        product,
-        product.selectedColor,
-        product.selectedSize,
-        product.quantity
-      );
+    cart.cartItems.forEach(async (product) => {
+      //@ts-ignore
+      await addtoCart(product, product.color, product.size, product.quantity);
     });
     localStorage.removeItem("cart");
 

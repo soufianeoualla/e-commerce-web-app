@@ -10,14 +10,11 @@ export const ShippingAddressSchema = z.object({
   state: z.string().min(2, {
     message: "State is required.",
   }),
-  zipCode: z.preprocess(
-    (val) => parseInt(val as string),
-    z.number().positive().min(1, {
-      message: "zipCode is required.",
-    })
-  ),
   country: z.string().min(2, {
     message: "Country is required.",
+  }),
+  zipCode: z.string().min(2, {
+    message: "zipCode is required.",
   }),
   email: z.string({
     message: "Email is required.",

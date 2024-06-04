@@ -7,8 +7,6 @@ import { ImageSlider } from "./ImageSlider";
 import { cn } from "@/lib/utils";
 import { CartContext } from "@/context/CartContext";
 import { SonnerContext } from "@/context/SonnerContext";
-import { useSession } from "next-auth/react";
-import { addtoCart } from "@/actions/cart";
 import { handleUserWishlist } from "@/actions/wishlist";
 
 type Props = {

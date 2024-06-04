@@ -1,11 +1,10 @@
+import React, { Suspense } from "react";
 import { Hero } from "./Hero";
 import { Features } from "./Features";
-import { BestSelling } from "./BestSelling";
 import { Banner } from "./Banner";
 import { ProductCategory } from "./ProductCategory";
-import { Suspense } from "react";
 
-export const page = async () => {
+const page = () => {
   return (
     <main>
       <Hero />
@@ -20,4 +19,5 @@ export const page = async () => {
     </main>
   );
 };
+
 export default page;

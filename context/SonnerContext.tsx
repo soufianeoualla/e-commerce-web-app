@@ -1,6 +1,5 @@
 "use client";
 import React, { ReactNode, createContext, useState } from "react";
-import { Check } from "lucide-react";
 import { Sonner } from "@/components/store/Sonner";
 
 interface ContextProps {
