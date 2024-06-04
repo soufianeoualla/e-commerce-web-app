@@ -25,6 +25,13 @@ const getSavedCart = () => {
       };
     }
   }
+  return {
+    id: "xxxx",
+    userId: "xxxxx",
+    cartItems: [],
+    total: 0,
+    quantity: 0,
+  };
 };
 
 type Cart = {
