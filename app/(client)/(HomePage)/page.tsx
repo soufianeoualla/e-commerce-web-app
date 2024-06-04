@@ -5,7 +5,7 @@ import { Banner } from "./Banner";
 import { ProductCategory } from "./ProductCategory";
 import { Suspense } from "react";
 
-export const Home = async () => {
+export const page = async () => {
   return (
     <main>
       <Hero />
@@ -20,4 +20,4 @@ export const Home = async () => {
     </main>
   );
 };
-export default Home;
+export default page;
