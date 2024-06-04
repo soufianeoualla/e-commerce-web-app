@@ -12,19 +12,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { checkoutSchema } from "@/schemas";
+import { ShippingAddressSchema } from "@/schemas";
 import { Order } from "./Order";
 export const CheckoutForm = () => {
-  const form = useForm<z.infer<typeof checkoutSchema>>({
-    resolver: zodResolver(checkoutSchema),
+  const form = useForm<z.infer<typeof ShippingAddressSchema>>({
+    resolver: zodResolver(ShippingAddressSchema),
     defaultValues: {
       city: "",
       country: "",
-      Email: "",
+      email: "",
       fullName: "",
       state: "",
       streetAddress: "",
-      zipCode: "",
+      zipCode: undefined,
     },
   });
   return (
@@ -112,7 +112,7 @@ export const CheckoutForm = () => {
           <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
-              name="Email"
+              name="email"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email</FormLabel>

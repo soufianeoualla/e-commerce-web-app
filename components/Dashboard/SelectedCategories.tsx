@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { category } from "@prisma/client";
+import { Category } from "@prisma/client";
 import { Check } from "lucide-react";
 
 type value = {
@@ -7,7 +7,7 @@ type value = {
 };
 
 type Props = {
-  categories: category[];
+  categories: Category[];
   onChange: (value: string) => void;
   onRemove: (value: string) => void;
   values: value[];

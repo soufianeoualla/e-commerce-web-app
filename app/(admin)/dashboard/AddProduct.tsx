@@ -18,7 +18,7 @@ import { Check, Loader } from "lucide-react";
 import { getAllCategories } from "@/db/queries";
 import Tiptap from "@/components/Dashboard/TipTap";
 import { ImageUploader } from "@/components/Dashboard/ImageUploader";
-import { Color, Size, category } from "@prisma/client";
+import {  Category } from "@prisma/client";
 import { SelectedColors } from "@/components/Dashboard/SelectedColors";
 import { SelectedSizes } from "@/components/Dashboard/SelectedSizes";
 import { SelectedCategories } from "@/components/Dashboard/SelectedCategories";
@@ -43,7 +43,7 @@ const AddProduct = () => {
     },
   });
 
-  const [categories, setCategories] = useState<category[]>();
+  const [categories, setCategories] = useState<Category[]>();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();

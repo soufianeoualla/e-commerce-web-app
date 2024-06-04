@@ -1,5 +1,5 @@
-import { BreadcrumbWithCustomSeparator } from "@/components/BreadCrumb";
 import { ResetPassword } from "@/components/auth/ResetPassword";
+import { BreadcrumbWithCustomSeparator } from "@/components/store/BreadCrumb";
 import React from "react";
 
 const page = () => {

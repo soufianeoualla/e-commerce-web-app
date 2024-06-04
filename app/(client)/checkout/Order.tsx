@@ -2,16 +2,14 @@
 import TotalPrice from "@/components/store/TotalPrice";
 import { Button } from "@/components/ui/button";
 import { CartContext } from "@/context/CartContext";
-import { UserCartContext } from "@/context/UserCartContext";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useContext } from "react";
 
 export const Order = () => {
   const { cart } = useContext(CartContext);
-  const { cartProducts, cartTotal } = useContext(UserCartContext);
-  const products = cartProducts || cart.products;
-  const subtotal = cartTotal || cart.total;
+  const products = cart.cartItems;
+  const subtotal = cart.total;
 
   return (
     <div className="w-[372px] text-neutral-500">
@@ -26,8 +24,8 @@ export const Order = () => {
               className="h-10 w-10 rounded-full bg-W100 flex justify-center items-center"
             >
               <Image
-                src={product.images[0].imageSrc}
-                alt={product.title}
+                src={product.product.images[0].imageSrc}
+                alt={product.product.title}
                 width={24}
                 height={35}
               />
