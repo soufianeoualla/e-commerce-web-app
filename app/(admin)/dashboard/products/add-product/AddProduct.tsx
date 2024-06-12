@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { addProductSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext, useEffect, useState, useTransition } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Check, Loader } from "lucide-react";
@@ -25,6 +25,7 @@ import { SelectedCategories } from "@/components/Dashboard/SelectedCategories";
 import { cn } from "@/lib/utils";
 import { addProduct } from "@/actions/addProduct";
 import { SonnerContext } from "@/context/SonnerContext";
+
 
 const AddProduct = () => {
   const form = useForm<z.infer<typeof addProductSchema>>({

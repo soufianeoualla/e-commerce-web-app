@@ -1,35 +1,48 @@
 "use client";
-import { SingleProduct } from "@/lib/interfaces";
+import { Review, SingleProduct } from "@/lib/interfaces";
 import { Check, Heart, Minus, Plus, Share2 } from "lucide-react";
 import React, { useContext, useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import { ImageSlider } from "./ImageSlider";
-import { cn } from "@/lib/utils";
+import { cn, sizes } from "@/lib/utils";
 import { CartContext } from "@/context/CartContext";
 import { SonnerContext } from "@/context/SonnerContext";
-import { handleUserWishlist } from "@/actions/wishlist";
+import { Button } from "@/components/ui/button";
+import { WishlistContext } from "@/context/WishlistContext";
+import { FormError } from "@/components/auth/FormError";
 
 type Props = {
   product: SingleProduct;
+  reviews: Review[];
 };
 
-export const Product = ({ product }: Props) => {
+export const Product = ({ product, reviews }: Props) => {
   const [selectedColor, setSelectedColor] = useState<number>(0);
-  const [selectedSize, setSelectedSize] = useState<number>(0);
+  const [selectedSize, setSelectedSize] = useState<number | undefined>();
   const [quantity, setQuantity] = useState<number>(1);
+  const [error, setError] = useState<string | undefined>("");
 
   const { addProduct } = useContext(CartContext);
+  const { wishlist, handleWishlist } = useContext(WishlistContext);
+  const isExist = wishlist.products.some(
+    (item) => item.productId === product.id
+  );
   const { handleSonner } = useContext(SonnerContext);
 
   const handleAddToCart = () => {
+    if (!selectedSize) return setError("All fields are required");
     addProduct(
       product!,
       quantity,
-      product!.sizes[selectedSize],
+      sizes[selectedSize].title,
       product!.colors[selectedColor]
     );
     handleSonner("item add to cart");
   };
+  const overallRating =
+    reviews.length > 0
+      ? reviews.reduce((acc, val) => acc + val.rating, 0) / reviews.length
+      : 0;
 
   return (
     <div className="flex justify-between items-center gap-x-28 mb-[146px]">
@@ -45,7 +58,8 @@ export const Product = ({ product }: Props) => {
         <div className="flex items-center gap-x-2 mt-3 mb-6 ">
           <div className="flex justify-center items-center gap-x-2 px-4 h-7 bg-W100 text-neutral-500 rounded-2xl text-xs">
             <FaStar className="w-4 h-4" />
-            4.2 — 54 Reviews
+            {overallRating.toFixed(1)} — {reviews.length}{" "}
+            {reviews.length === 1 ? "Review" : "Reviews"}
           </div>
           <span className="text-xs font-medium px-4 py-0.5 border rounded-3xl text-neutral-black">
             {product.quantity > 0 ? "IN STOCK" : "OUT OF STOCK"}
@@ -84,17 +98,18 @@ export const Product = ({ product }: Props) => {
             Select Size
           </span>
           <div className="flex items-center gap-x-2 text-xs font-medium">
-            {product.sizes.map((size, index) => (
-              <button
+            {sizes.map((size, index) => (
+              <Button
+                disabled={!product.sizes.includes(size.title)}
                 onClick={() => setSelectedSize(index)}
                 key={index}
                 className={cn(
-                  "w-10 h-10 border border-slate-200 flex justify-center items-center rounded-md hover:bg-W100 hover:border-neutral-black/50",
+                  "bg-white w-10 h-10 border text-neutral-black border-slate-200 flex justify-center items-center rounded-md hover:bg-W100 hover:border-neutral-black/50 ",
                   selectedSize === index && "bg-W100 border-neutral-black"
                 )}
               >
-                {size}
-              </button>
+                {size.title}
+              </Button>
             ))}
           </div>
         </div>
@@ -126,18 +141,26 @@ export const Product = ({ product }: Props) => {
             </button>
           </div>
         </div>
-        <div className="cta flex  items-center gap-x-4 mb-3">
+          {error && <FormError message={error} classname="w-[284px]" />}
+        <div className=" flex  items-center gap-x-4 mb-3 ">
+
           <button
             onClick={handleAddToCart}
-            className="bg-neutral-black h-11 w-[284px] text-white font-medium rounded-md hover:bg-opacity-80"
+            className="bg-neutral-black  h-11 w-[284px] text-white font-medium rounded-md hover:bg-opacity-80"
           >
             Add to cart
           </button>
           <button
-            onClick={() => handleUserWishlist(product.id)}
+            onClick={() => handleWishlist(product)}
             className="rounded-md border border-slate-200 h-11 w-11 flex justify-center items-center text-neutral-600 hover:bg-W100"
           >
-            <Heart />
+            <Heart
+              className={
+                isExist
+                  ? "fill-rose-500 text-rose-500"
+                  : "hover:fill-rose-500 hover:text-rose-500"
+              }
+            />
           </button>
         </div>
         <p className="text-neutral-500 font-medium uppercase text-xs">

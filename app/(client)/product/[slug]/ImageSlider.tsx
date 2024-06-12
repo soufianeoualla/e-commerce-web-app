@@ -45,17 +45,19 @@ export const ImageSlider = ({ images }: Props) => {
           </button>
         </>
       )}
-      <div className="flex justify-center items-center gap-x-1 absolute left-1/2 -translate-x-1/2 bottom-3 ">
-        {images.map((image, index) => (
-          <div
-            key={image.id}
-            className={cn(
-              "w-2 h-2 rounded-full bg-neutral-black/20",
-              imageSlide === index && "bg-neutral-black/60"
-            )}
-          />
-        ))}
-      </div>
+      {images.length > 1 && (
+        <div className="flex justify-center items-center gap-x-1 absolute left-1/2 -translate-x-1/2 bottom-3 ">
+          {images.map((image, index) => (
+            <div
+              key={image.id}
+              className={cn(
+                "w-2 h-2 rounded-full bg-neutral-black/20",
+                imageSlide === index && "bg-neutral-black/60"
+              )}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

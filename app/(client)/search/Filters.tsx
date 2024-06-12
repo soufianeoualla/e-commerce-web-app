@@ -48,14 +48,13 @@ const Filters = ({
       setCategories(categories?.filter((category) => category !== item));
     } else setCategories(categories ? [...categories, item] : [item]);
   };
-  if (!categoriesData) return null;
 
   return (
-    <div className="border rounded-md w-[280px] sticky self-start top-0 p-4">
+    <div className="border rounded-md sticky self-start top-0 p-4 pb-8">
       <div className="">
         <h3 className="text-neutral-black font-medium">Categories</h3>
         <div className="mt-8">
-          {categoriesData.map((item, index) => (
+          {categoriesData?.map((item, index) => (
             <>
               <div
                 onClick={() => handleCategories(item.title)}

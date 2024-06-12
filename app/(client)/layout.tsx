@@ -7,6 +7,7 @@ import { SonnerProvider } from "@/context/SonnerContext";
 import { Header } from "@/components/store/Header";
 const inter = Inter({ subsets: ["latin"] });
 import { SessionProvider } from "next-auth/react";
+import { WishlistProvider } from "@/context/WishlistContext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,10 +24,12 @@ export default function RootLayout({
       <body className={inter.className}>
         <SonnerProvider>
           <SessionProvider>
-            <CartProvider>
-              <Header />
-              {children}
-            </CartProvider>
+            <WishlistProvider>
+              <CartProvider>
+                <Header />
+                {children}
+              </CartProvider>
+            </WishlistProvider>
           </SessionProvider>
           <NewsLetter />
           <Footer />

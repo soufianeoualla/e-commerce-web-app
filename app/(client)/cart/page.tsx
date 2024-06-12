@@ -23,7 +23,7 @@ const CartPage = () => {
           </h3>
           <hr className="border-slate-200" />
           <div className=" mt-12">
-            {cartItems.map((cartItem) => (
+            {cartItems?.map((cartItem) => (
               <CartProductCard key={cartItem.productId} cartItem={cartItem} />
             ))}
           </div>

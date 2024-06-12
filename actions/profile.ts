@@ -71,6 +71,6 @@ export const changePassword = async (
         password: hashedPassword,
       },
     });
-    return { success: "Password changed successfully" };
+    return { success: "Password has been changed successfully" };
 
 };

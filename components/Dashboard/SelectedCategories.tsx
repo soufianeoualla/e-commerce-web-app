@@ -30,7 +30,10 @@ export const SelectedCategories = ({
   return (
     <div className="flex gap-4 flex-wrap">
       {categories.map((item) => (
-        <div key={item.id} className="flex justify-center items-center gap-x-2">
+        <div
+          key={item.id}
+          className="flex justify-center items-center gap-x-2 capitalize"
+        >
           <button
             type="button"
             onClick={() => handleSelectedCategories(item.title)}

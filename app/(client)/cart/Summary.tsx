@@ -11,22 +11,10 @@ type Props = {
 };
 
 export const Summary = ({ subtotal }: Props) => {
-  const [error, setError] = useState<string | undefined>("");
-  const [url, seturl] = useState<string | null | undefined>("");
-  const [isPending, startTransition] = useTransition();
+ 
   const { status } = useSession();
-  const router = useRouter();
-  const handleCheckout = () => {
-    startTransition(() => {
-      createCheckoutSession().then((data) => {
-        setError(data?.error);
-        seturl(data?.url);
-      });
-      if (url) {
-        router.push(url);
-      }
-    });
-  };
+  const router = useRouter()
+
   return (
     <div className="w-[341px] py-8 px-6 rounded-md border border-slate-200 text-neutral-500">
       <h1 className="text-neutral-black font-bold mb-10 text-[16px]">
@@ -35,8 +23,8 @@ export const Summary = ({ subtotal }: Props) => {
       <TotalPrice subtotal={subtotal} />
       {status === "authenticated" ? (
         <Button
-          disabled={isPending}
-          onClick={handleCheckout}
+        onClick={() => router.push("/checkout")}
+
           className=" w-full  bg-neutral-black text-white font-medium my-8 h-11 rounded-md  hover:bg-opacity-90 "
         >
           {"Checkout"}

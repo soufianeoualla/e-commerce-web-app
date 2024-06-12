@@ -25,6 +25,17 @@ export const addProduct = async (
     sizes,
   } = validateFields.data;
 
+  const existingProduct = await db.product.findUnique({
+    where: {
+      slug,
+    },
+  });
+
+  if (existingProduct)
+    return {
+      error: "A product already exist with this slug, Please change the slug ",
+    };
+
   await db.product.create({
     data: {
       title,
@@ -33,7 +44,7 @@ export const addProduct = async (
       isFeatured,
       quantity,
       sku,
-      slug:slug.toLowerCase(),
+      slug: slug.toLowerCase(),
       categories: categories.map((item) => item.category),
       colors: colors.map((item) => item.hexCode),
       sizes: sizes.map((item) => item.size),

@@ -1,24 +1,44 @@
-import { Ellipsis, SearchIcon } from "lucide-react";
+"use client";
+import { Ellipsis, Loader, SearchIcon } from "lucide-react";
 import Link from "next/link";
 import { getAllProducts } from "@/db/queries";
 import Image from "next/image";
+import {  useEffect, useState } from "react";
+import { SingleProduct } from "@/lib/interfaces";
+import { Button } from "@/components/ui/button";
 
-export const Products = async () => {
-  const products = await getAllProducts();
+export const Products = () => {
+  const [products, setProducts] = useState<
+    SingleProduct[] | null | undefined
+  >();
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getAllProducts();
+      setProducts(data);
+    };
+    getData();
+  }, []);
+
+  if (!products)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader className="animate-spin" />
+      </div>
+    );
+
   return (
     <>
-      <div className="w-full bg-white rounded-lg border border-slate-200">
+      <div className="w-full bg-white rounded-lg border border-slate-200 h-full">
         <div className="px-10 py-6 flex justify-between items-center">
           <h3 className="text-neutral-black font-medium text-[16px]">
             Products
           </h3>
           <div className="flex items-center gap-x-4">
-            <Link
-              href={"/dashboard/add-product"}
-              className="bg-neutral-black text-white font-medium px-4 py-2 rounded"
-            >
+            <Button asChild>
+            <Link href={'/dashboard/products/add-product'}>
               Add Product{" "}
             </Link>
+            </Button>
             <div className="search relative text-neutral-500">
               <input
                 placeholder="Search products "

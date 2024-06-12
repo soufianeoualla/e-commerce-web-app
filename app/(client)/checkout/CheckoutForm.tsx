@@ -14,6 +14,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { ShippingAddressSchema } from "@/schemas";
 import { Order } from "./Order";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { createCheckoutSession } from "@/actions/checkout";
 export const CheckoutForm = () => {
   const form = useForm<z.infer<typeof ShippingAddressSchema>>({
     resolver: zodResolver(ShippingAddressSchema),
@@ -27,10 +30,27 @@ export const CheckoutForm = () => {
       zipCode: undefined,
     },
   });
+  const [error, setError] = useState<string | undefined>("");
+  const [url, seturl] = useState<string | null | undefined>("");
+  const [isPending, startTransition] = useTransition();
+
+  const router = useRouter();
+  const handleCheckout = (values: z.infer<typeof ShippingAddressSchema>) => {
+    startTransition(async () => {
+      await createCheckoutSession(values).then((data) => {
+        setError(data?.error);
+        seturl(data?.url);
+      });
+      if (url) {
+        router.push(url);
+      }
+    });
+  };
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(() => {})}
+        onSubmit={form.handleSubmit(handleCheckout)}
         className=" w-full flex items-start justify-between"
       >
         <div className="w-[640px] pr-28 border-r border-slate-300 ">
@@ -44,7 +64,7 @@ export const CheckoutForm = () => {
               <FormItem>
                 <FormLabel>Street Address</FormLabel>
                 <FormControl>
-                  <Input placeholder="Street Address" {...field} />
+                  <Input disabled={isPending} placeholder="Street Address" {...field} />
                 </FormControl>
 
                 <FormMessage />
@@ -59,7 +79,7 @@ export const CheckoutForm = () => {
                 <FormItem>
                   <FormLabel>City</FormLabel>
                   <FormControl>
-                    <Input placeholder="City" {...field} />
+                    <Input disabled={isPending} placeholder="City" {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -73,7 +93,7 @@ export const CheckoutForm = () => {
                 <FormItem>
                   <FormLabel>State</FormLabel>
                   <FormControl>
-                    <Input placeholder="State" {...field} />
+                    <Input disabled={isPending} placeholder="State" {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -101,7 +121,7 @@ export const CheckoutForm = () => {
                 <FormItem>
                   <FormLabel>Coutry</FormLabel>
                   <FormControl>
-                    <Input placeholder="Coutry" {...field} />
+                    <Input disabled={isPending} placeholder="Coutry" {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -117,7 +137,7 @@ export const CheckoutForm = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="Email" {...field} />
+                    <Input disabled={isPending} type="email" placeholder="Email" {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -131,7 +151,7 @@ export const CheckoutForm = () => {
                 <FormItem>
                   <FormLabel>Full name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Full name" {...field} />
+                    <Input disabled={isPending} placeholder="Full name" {...field} />
                   </FormControl>
 
                   <FormMessage />

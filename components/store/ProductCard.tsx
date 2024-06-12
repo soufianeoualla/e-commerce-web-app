@@ -1,15 +1,23 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { SingleProduct } from "@/lib/interfaces";
 import { Heart } from "lucide-react";
+import { useContext } from "react";
+import { WishlistContext } from "@/context/WishlistContext";
 
 type Props = {
   product: SingleProduct;
 };
 
 export const ProductCard = async ({ product }: Props) => {
+  const { wishlist, handleWishlist } = useContext(WishlistContext);
+  const isExist = wishlist.products.some(
+    (item) => item.productId === product.id
+  );
+  
   return (
-    <Link href={`/product/${product.slug}`}>
+    <div>
       <div className="relative group">
         <div className="bg-W100 w-[237px] h-[312px] flex justify-center items-center z-20">
           <Image
@@ -20,12 +28,24 @@ export const ProductCard = async ({ product }: Props) => {
           />
 
           <div className="absolute w-[237px] h-[320px] top-0 bg-white/30 hidden group-hover:block">
-            <button className="absolute right-2 top-2">
-              <Heart className="w-6 h-6 text-neutral-500 hover:text-red-400" startOffset={1}  />
+            <button
+              onClick={() => handleWishlist(product)}
+              className="absolute right-2 top-2"
+            >
+              <Heart
+                className={
+                  isExist
+                    ? "fill-rose-500 text-rose-500"
+                    : "hover:fill-rose-500 hover:text-rose-500"
+                }
+              />
             </button>
-            <button className="w-full h-12 absolute bottom-0 bg-neutral-black text-white font-medium tracking-wide hover:bg-opacity-80">
+            <Link
+              href={`/product/${product.slug}`}
+              className="w-full h-12 absolute bottom-0 bg-neutral-black text-white font-medium tracking-wide hover:bg-opacity-80 flex justify-center items-center"
+            >
               Select Variant
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -39,6 +59,6 @@ export const ProductCard = async ({ product }: Props) => {
           <span className="text-neutral-600">${product.price}</span>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };

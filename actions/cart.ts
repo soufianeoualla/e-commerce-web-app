@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { db } from "@/db/db";
 import { getUserCart } from "@/db/queries";
 import { SingleProduct } from "@/lib/interfaces";
+import { revalidatePath } from "next/cache";
 export const addtoCart = async (
   product: SingleProduct,
   color: string,
@@ -52,25 +53,16 @@ export const addtoCart = async (
     }
   });
 
-  const totalQuantity = cart.cartItems.reduce(
-    (acc, val) => acc + (val.quantity || 0),
-    0
-  );
-
-  const totalAmount = cart.cartItems.reduce(
-    (acc, val) => acc + (val.quantity || 0) * (val.product.price || 0),
-    0
-  );
-
   await db.cart.update({
     where: {
       id: cart.id,
     },
     data: {
-      quantity: totalQuantity,
-      total: totalAmount,
+      quantity: cart.quantity + quantity,
+      total: cart.total + quantity * product.price,
     },
   });
+  revalidatePath(`/product/${product.slug}`);
 };
 
 export const handleCartItemQuantity = async (
@@ -79,7 +71,6 @@ export const handleCartItemQuantity = async (
 ) => {
   const session = await auth();
   if (!session) return;
-  const user = session.user;
   const cart = await getUserCart();
   const cartItem = await db.cartItem.findUnique({
     where: {
@@ -119,7 +110,7 @@ export const handleCartItemQuantity = async (
         quantity: cartItem.quantity - 1,
       },
     });
-    
+
     await db.cart.update({
       where: {
         id: cart?.id,
@@ -137,7 +128,32 @@ export const deleteCartItem = async (id: string) => {
     where: { id },
   });
   if (!exisingCartItem) return;
+  const cart = await db.cart.findUnique({
+    where: {
+      id: exisingCartItem.cartId,
+    },
+  });
+  if (!cart) return;
+
+  const product = await db.product.findUnique({
+    where: {
+      id: exisingCartItem.productId,
+    },
+  });
+  if (!product) return;
+
   await db.cartItem.delete({
     where: { id: exisingCartItem.id },
   });
+
+  await db.cart.update({
+    where: {
+      id: cart.id,
+    },
+    data: {
+      quantity: cart.quantity - exisingCartItem.quantity,
+      total: cart.total - exisingCartItem.quantity * product?.price,
+    },
+  });
+  revalidatePath("/cart");
 };

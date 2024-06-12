@@ -43,15 +43,7 @@ export const changePasswordSchema = z
       path: ["confirmPassword"],
     }
   );
-export const changeNameEmailSchema = z.object({
-  name: z.string().min(3, {
-    message: "Full name is required",
-  }),
 
-  email: z.string().email({
-    message: "Email is required",
-  }),
-});
 export const loginSchema = z.object({
   email: z.string().email({
     message: "Email is required",

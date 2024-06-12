@@ -13,18 +13,20 @@ enum Role {
 }
 
 model User {
-  id            String    @id @default(cuid()) @map(name: "id")
-  name          String
-  email         String    @unique
-  password      String?
-  emailVerified DateTime?
-  image         String?
-  role          Role      @default(user)
-  account       Account[]
-  wishlist      Wishlist?
-  order         Order[]
-  cart          Cart?
-  reviews       Review[]
+  id                String           @id @default(cuid()) @map(name: "id")
+  name              String
+  email             String           @unique
+  password          String?
+  emailVerified     DateTime?
+  image             String?
+  role              Role             @default(user)
+  account           Account[]
+  wishlist          Wishlist?
+  order             Order[]
+  cart              Cart?
+  reviews           Review[]
+  shippingAddress   ShippingAddress? @relation(fields: [shippingAddressId], references: [id])
+  shippingAddressId Int?             @unique
 }
 
 model Account {
@@ -47,9 +49,10 @@ model Account {
 }
 
 model Review {
-  id        String  @id @default(cuid())
-  product   Product @relation(fields: [productId], references: [id])
-  user      User    @relation(fields: [userId], references: [id])
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
   rating    Int
   text      String
   productId String
@@ -115,27 +118,27 @@ model CartItem {
 }
 
 model OrderItem {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int     @id @default(autoincrement())
   productId String
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
   quantity  Int
+  color     String
+  size      String
   orderId   String
-  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
 
 model Order {
-  id                String          @id @default(uuid())
+  id                String           @id @default(uuid())
   userId            String
-  user              User            @relation(fields: [userId], references: [id])
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime?
+  user              User             @relation(fields: [userId], references: [id])
   amount            Float
-  isPaid            Boolean         @default(false)
-  ShippingAddress   ShippingAddress? @relation(fields: [shippingAddressId], references: [id])
+  isPaid            Boolean          @default(false)
+  shippingAddress   ShippingAddress? @relation(fields: [shippingAddressId], references: [id])
   shippingAddressId Int?
   orderItems        OrderItem[]
-  BillingAddress    BillingAddress? @relation(fields: [billingAddressId], references: [id])
-  billingAddressId  Int?
 }
 
 model Cart {
@@ -149,26 +152,16 @@ model Cart {
 
 model ShippingAddress {
   id            Int     @id @default(autoincrement())
-  city          String
-  country       String
-  state         String
   streetAddress String
+  city          String
+  state         String
+  country       String
   zipCode       String
   email         String  @unique
   fullName      String
-  Order         Order[]
-}
-
-model BillingAddress {
-  id            Int     @id @default(autoincrement())
-  city          String
-  country       String
-  state         String
-  streetAddress String
-  zipCode       String
-  email         String  @unique
-  fullName      String
-  Order         Order[]
+  orders        Order[]
+  user          User? // This line was modified
+  userId        String?
 }
 
 model VerificationToken {

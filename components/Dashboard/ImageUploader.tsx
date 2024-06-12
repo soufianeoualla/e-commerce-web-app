@@ -5,13 +5,11 @@ import { CldUploadWidget } from "next-cloudinary";
 import { ImagePlus, X } from "lucide-react";
 
 type Props = {
-  disabled?: boolean;
   onChange: (value: string) => void;
   onRemove: (value: string) => void;
   values: string[];
 };
 export const ImageUploader = ({
-  disabled,
   onChange,
   onRemove,
   values,

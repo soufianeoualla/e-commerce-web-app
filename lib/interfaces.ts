@@ -1,3 +1,5 @@
+import { ShippingAddress, User } from "@prisma/client";
+
 type Image = {
   id: number;
   imageSrc: string;
@@ -37,3 +39,49 @@ export interface UserCart {
   userId: string;
   CartItems: CartItem[];
 }
+
+export interface OrderItem {
+  id: number;
+  orderId: string;
+  productId: string;
+  quantity: number;
+  color: string;
+  size: string;
+  product: SingleProduct;
+}
+
+export interface Order {
+  id: string;
+  createdAt: Date;
+  amount: number;
+  isPaid: Boolean;
+  userId: string;
+  orderItems: OrderItem[];
+}
+
+export interface WishlistItem {
+  id: string;
+  wishlistId: number;
+  productId: string;
+  product: SingleProduct;
+}
+
+export interface WishlistTypes {
+  id: number;
+  userId: string;
+  products: WishlistItem[];
+}
+
+export interface Review {
+  id: string;
+  createdAt: Date;
+  rating: number;
+  text: string;
+  productId: string;
+  userId: string;
+  user: {
+    name: string;
+  };
+}
+
+

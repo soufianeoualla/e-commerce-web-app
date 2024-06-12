@@ -9,6 +9,7 @@ import { getUserCart } from "@/db/queries";
 import { CartItem, SingleProduct } from "@/lib/interfaces";
 import { useSession } from "next-auth/react";
 import { ReactNode, createContext, useEffect, useState } from "react";
+import { v4 as uuid } from "uuid";
 
 const getSavedCart = () => {
   if (typeof window !== "undefined") {
@@ -63,7 +64,7 @@ export const CartContext = createContext<ContextProps>({
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<Cart>(getSavedCart());
-
+  const [updateTrigger, setupdateTrigger] = useState<number>(0);
   const { data: session, status } = useSession();
   useEffect(() => {
     if (status === "authenticated") {
@@ -73,11 +74,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         setCart(cartData);
       };
       fetchData();
-    }
-  }, [status]);
+    }else return
+  }, [status, updateTrigger]);
 
   useEffect(() => {
-    if (status !== "authenticated") {
+    if (status === "authenticated") {
+      localStorage.removeItem("cart");
+    } else {
       localStorage.setItem("cart", JSON.stringify(cart));
     }
   }, [cart, status]);
@@ -89,7 +92,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     color: string
   ) => {
     if (status === "authenticated") {
-      return addtoCart(product, color, size, quantity);
+      addtoCart(product, color, size, quantity);
+      return setupdateTrigger(Math.random() * 100);
     }
     const newState = { ...cart };
     const isExist = newState.cartItems.some((item) => item.id === product.id);
@@ -105,34 +109,35 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         newState.quantity += quantity;
         newState.total += product.price;
       } else {
-        const addedProduct = {
+        const cartItem = {
           product,
           size: size,
           color: color,
           quantity,
-          id: "xxxx",
+          id: uuid(),
           cartId: "xxxx",
           productId: product.id,
         };
-        newState.cartItems.push(addedProduct);
+        newState.cartItems.push(cartItem);
         newState.quantity += quantity;
         newState.total += product.price * quantity;
       }
     } else {
-      const addedProduct = {
+      const cartItem = {
         product,
         size: size,
         color: color,
         quantity,
-        id: "xxxx",
+        id: uuid(),
         cartId: "xxxx",
         productId: product.id,
       };
-      newState.cartItems.push(addedProduct);
+      newState.cartItems.push(cartItem);
       newState.quantity += quantity;
       newState.total += product.price * quantity;
     }
     setCart(newState);
+    setupdateTrigger(Math.random() * 100);
   };
 
   const handleQuantity = (operation: "plus" | "minus", id: string) => {
@@ -158,6 +163,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       }
 
       setCart(newState);
+      setupdateTrigger(Math.random() * 100);
     }
   };
 
@@ -175,6 +181,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       newState.total -=
         selectedProduct.quantity * selectedProduct.product.price;
       setCart(newState);
+      setupdateTrigger(Math.random() * 100);
     }
   };
 

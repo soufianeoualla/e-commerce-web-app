@@ -1,73 +1,111 @@
 "use client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+
 import { Input } from "@/components/ui/input";
-import { changeNameEmailSchema } from "@/schemas";
-import { useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
+import { CldUploadWidget } from "next-cloudinary";
+import { useEffect, useState, useTransition } from "react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { FormSucces } from "@/components/auth/FormSucces";
+import { FormError } from "@/components/auth/FormError";
+import { changeAccounDetails } from "@/actions/account";
+import { Label } from "@/components/ui/label";
+import { getUserImage } from "@/db/queries";
 export const Account = () => {
-  const form = useForm<z.infer<typeof changeNameEmailSchema>>({
-    resolver: zodResolver(changeNameEmailSchema),
-    defaultValues: {
-      email: "",
-      name: "",
-    },
-  });
   const { data, status } = useSession();
+
+  const [image, setImage] = useState<string | null | undefined>("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const image = await getUserImage();
+      setImage(image);
+    };
+    getUserData();
+  }, []);
+
+  const handleUpload = (result: any) => {
+    setImage(result.info.secure_url);
+  };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    startTransition(async () => {
+      await changeAccounDetails(name, email, image).then((data) => {
+        setError(data?.error);
+        setSuccess(data?.success);
+      });
+    });
+  };
   return (
     <section className=" w-full">
       <h3 className="text-[16px] text-neutral-black font-semibold">
         Account Details
       </h3>
-      <div className="w-12 h-12 rounded-full bg-slate-200/50 text-blue-600 mt-10 flex justify-center items-center uppercase font-medium text-xl">
-        {status === "authenticated" && data?.user?.name?.slice(0, 1)}
-      </div>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(() => {})}
-          className=" space-y-4 mt-8"
+
+      <form onSubmit={handleSubmit} className=" space-y-4 mt-8 w-[300px]">
+        <CldUploadWidget uploadPreset="e8pbrjoh" onUpload={handleUpload}>
+          {({ open }) => {
+            return (
+              <div>
+                {image ? (
+                  <Image
+                    onClick={() => open()}
+                    src={image}
+                    alt="user-image"
+                    width={48}
+                    height={48}
+                    className="rounded-full"
+                  />
+                ) : (
+                  <Button
+                    disabled={isPending}
+                    type="button"
+                    onClick={() => open()}
+                    className="w-12 h-12 rounded-full bg-slate-200/50 text-blue-600 mt-10 flex justify-center items-center uppercase font-medium text-xl"
+                  >
+                    {data?.user?.name?.slice(0, 1)}
+                  </Button>
+                )}
+              </div>
+            );
+          }}
+        </CldUploadWidget>
+
+        <div className="space-y-2">
+          <Label>Name</Label>
+          <Input
+            disabled={isPending}
+            type="text"
+            placeholder="Full name"
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label>Email</Label>
+          <Input
+            disabled={isPending}
+            type="email"
+            placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        {success && <FormSucces message={success} />}
+        {error && <FormError message={error} />}
+
+        <Button
+          disabled={isPending}
+          className="bg-neutral-black text-white font-medium h-11 rounded px-6 mt-16 hover:bg-opacity-80"
         >
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Full name</FormLabel>
-                <FormControl>
-                  <Input type="text" placeholder="Full name" {...field} />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input type="email" placeholder="Email" {...field} />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <button className="bg-neutral-black text-white font-medium h-11 rounded px-6 mt-16 hover:bg-opacity-80">
-            Save Changes
-          </button>
-        </form>
-      </Form>
+          Save Changes
+        </Button>
+      </form>
     </section>
   );
 };
+

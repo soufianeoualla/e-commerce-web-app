@@ -5,10 +5,22 @@ import Link from "next/link";
 import { Search } from "./Search";
 import { CartSheet } from "./CartSheet";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { getUserImage } from "@/db/queries";
+import { CategoryMenu } from "./CategoryMenu";
 
 export const Header = () => {
   const { data, status } = useSession();
+  const [image, setImage] = useState<string | null | undefined>("");
+
   const href = status === "authenticated" ? "/profile" : "/auth/login";
+  useEffect(() => {
+    const getUserData = async () => {
+      const image = await getUserImage();
+      setImage(image);
+    };
+    getUserData();
+  }, []);
   return (
     <header>
       <div className="bg-neutral-black flex justify-center items-center h-10 text-white gap-x-2 text-sm">
@@ -22,13 +34,14 @@ export const Header = () => {
             Ecommerce
           </b>
         </Link>
+        
         <nav>
           <ul className="flex items-center gap-8 text-sm text-neutral-500 font-medium ">
             <li className="hover:text-neutral-black">
               <Link href={"/"}>Home</Link>
             </li>
             <li className="hover:text-neutral-black">
-              <Link href={"/"}>Categories</Link>
+            <CategoryMenu/>
             </li>
             <li className="hover:text-neutral-black">
               <Link href={"/about"}>About</Link>
@@ -46,7 +59,17 @@ export const Header = () => {
               href={href}
               className="flex justify-center items-center gap-x-2 hover:underline hover:text-neutral-black hover:font-medium "
             >
-              <CircleUserRound width={25} strokeWidth={1.5} height={25} />
+              {image ? (
+                <Image
+                  src={image}
+                  alt="user-image"
+                  width={25}
+                  height={25}
+                  className="rounded-full"
+                />
+              ) : (
+                <CircleUserRound width={25} strokeWidth={1.5} height={25} />
+              )}
               {status === "authenticated" ? "Account" : "Login"}
             </Link>
           </div>

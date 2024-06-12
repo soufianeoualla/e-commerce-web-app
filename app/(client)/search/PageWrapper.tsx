@@ -1,5 +1,4 @@
 "use client";
-import Filters from "./Filters";
 import { X } from "lucide-react";
 import {
   Select,
@@ -10,19 +9,28 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ProductsList } from "../(HomePage)/ProductsList";
-import { useEffect, useMemo, useState } from "react";
-import { getProductBySearch } from "@/db/queries";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import { getProductBySearch, getProductsByCategory } from "@/db/queries";
 import { useSearchParams } from "next/navigation";
 import { colors, sizes } from "@/lib/utils";
 import { getAllProducts } from "@/db/queries";
 import { SingleProduct } from "@/lib/interfaces";
+type Props = {
+  categories: string[];
+  setCategories: Dispatch<SetStateAction<string[]>>;
+  color: number | undefined;
+  size: number | undefined;
+  values: [number, number];
+};
 
-export const PageWrapper = () => {
+export const PageWrapper = ({
+  categories,
+  size,
+  color,
+  setCategories,
+  values,
+}: Props) => {
   const [allProducts, setallProducts] = useState<SingleProduct[] | null>();
-  const [categories, setCategories] = useState<string[]>([]);
-  const [color, setColor] = useState<number | undefined>(undefined);
-  const [size, setSize] = useState<number | undefined>(undefined);
-  const [values, setValues] = useState<[number, number]>([5, 300]);
   const [sort, setSort] = useState<string>("");
   const [queriedProduct, setqueriedProduct] = useState<
     SingleProduct[] | null
@@ -32,17 +40,21 @@ export const PageWrapper = () => {
   };
   const searchParams = useSearchParams();
   const title = searchParams.get("query");
+  const category = searchParams.get("category");
   useEffect(() => {
     const getData = async () => {
       if (title) {
         const data = await getProductBySearch(title);
+        setqueriedProduct(data);
+      } else if (category) {
+        const data = await getProductsByCategory(category);
         setqueriedProduct(data);
       }
       const products = await getAllProducts();
       setallProducts(products);
     };
     getData();
-  }, [title]);
+  }, [title, category]);
 
   const products = useMemo(
     () => queriedProduct || allProducts || [],
@@ -78,54 +90,41 @@ export const PageWrapper = () => {
   }, [filteredProducts, sort]);
 
   return (
-    <div className="flex items-start gap-x-8 mb-32">
-      <Filters
-        setColor={setColor}
-        color={color}
-        setSize={setSize}
-        size={size}
-        categories={categories!}
-        setCategories={setCategories!}
-        setValues={setValues}
-        values={values}
-      />
-
-      <div className="py-2 w-full ">
-        <b className=" text-neutral-black">Applied Filters:</b>
-        <div className="flex items-center gap-x-2">
-          {categories &&
-            categories.map((item, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-x-2 h-9 justify-center px-4 rounded-2xl border border-slate-200 mt-3 text-neutral-black text-xs font-medium"
-              >
-                {item}
-                <button onClick={() => deleteCategoryFilter(index)}>
-                  <X className="w-4 h-4 cursor-pointer" />
-                </button>
-              </div>
-            ))}
-        </div>
-        <div className="flex justify-between items-center mt-6 gap-x-3  mb-4">
-          <p className="text-neutral-500 text-xs">
-            {sortedProducts.length > 9
-              ? `Showing 1-9 of ${sortedProducts.length} results.`
-              : `Showing 1-${sortedProducts.length} of ${sortedProducts.length} results.`}
-          </p>
-          <Select onValueChange={(value) => setSort(value)}>
-            <SelectTrigger className="w-[150px]  border-none  text-neutral-black font-medium">
-              <SelectValue placeholder="Sort By Price" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="asc">Price: ASC</SelectItem>
-                <SelectItem value="desc">Price: DESC</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-        <ProductsList products={sortedProducts} classname="py-4 gap-9" />
+    <div className="py-2 w-full ">
+      <b className=" text-neutral-black">Applied Filters:</b>
+      <div className="flex items-center gap-x-2">
+        {categories &&
+          categories.map((item, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-x-2 h-9 justify-center px-4 rounded-2xl border border-slate-200 mt-3 text-neutral-black text-xs font-medium"
+            >
+              {item}
+              <button onClick={() => deleteCategoryFilter(index)}>
+                <X className="w-4 h-4 cursor-pointer" />
+              </button>
+            </div>
+          ))}
       </div>
+      <div className="flex justify-between items-center mt-6 gap-x-3  mb-4">
+        <p className="text-neutral-500 text-xs">
+          {sortedProducts.length > 9
+            ? `Showing 1-9 of ${sortedProducts.length} results.`
+            : `Showing 1-${sortedProducts.length} of ${sortedProducts.length} results.`}
+        </p>
+        <Select onValueChange={(value) => setSort(value)}>
+          <SelectTrigger className="w-[150px]  border-none  text-neutral-black font-medium">
+            <SelectValue placeholder="Sort By Price" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="asc">Price: ASC</SelectItem>
+              <SelectItem value="desc">Price: DESC</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+      <ProductsList products={sortedProducts} classname="grid grid-cols-3" />
     </div>
   );
 };

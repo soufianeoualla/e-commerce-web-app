@@ -29,37 +29,6 @@ export async function POST(req: Request) {
       if (!orderId || !userId) {
         throw new Error("Invalid request metadata");
       }
-      const billingAddress = session.customer_details?.address;
-      const shippingAddress = session.shipping_details?.address;
-
-      await db.order.update({
-        where: { id: orderId },
-        data: {
-          isPaid: true,
-          ShippingAddress: {
-            create: {
-              fullName: session.customer_details?.name || "N/A",
-                city: shippingAddress?.city || "N/A",
-                country: shippingAddress?.country || "N/A",
-                state: shippingAddress?.state || "N/A",
-                streetAddress: shippingAddress?.line1 || "N/A",
-                zipCode: shippingAddress?.postal_code || "N/A",
-                email: session.customer_details?.email!,
-            },
-          },
-          BillingAddress: {
-            create: {
-              fullName: session.customer_details?.name || "N/A",
-              city: billingAddress?.city || "N/A",
-              country: billingAddress?.country || "N/A",
-              state: billingAddress?.state || "N/A",
-              streetAddress: billingAddress?.line1 || "N/A",
-              zipCode: billingAddress?.postal_code || "N/A",
-              email: session.customer_details?.email!,
-            },
-          },
-        },
-      });
     }
     return NextResponse.json({ result: event, ok: true });
   } catch (error) {

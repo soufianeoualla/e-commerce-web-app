@@ -3,6 +3,7 @@
 import { auth } from "@/auth";
 import { db } from "./db";
 import { cache } from "react";
+import { SingleProduct } from "@/lib/interfaces";
 
 export const getAllProducts = cache(async () => {
   return await db.product.findMany({
@@ -29,6 +30,23 @@ export const getProductBySearch = async (title: string) => {
       where: {
         slug: {
           contains: title,
+        },
+      },
+      include: {
+        images: true,
+      },
+    });
+  } catch (error) {
+    return null;
+  }
+};
+
+export const getProductsByCategory = async (category: string) => {
+  try {
+    return await db.product.findMany({
+      where: {
+        categories: {
+          has: category,
         },
       },
       include: {
@@ -131,7 +149,223 @@ export const getUserShippingAddress = async () => {
 export const getUserOrders = async () => {
   const session = await auth();
   const user = session?.user;
-  return await db.order.findMany({
-    where: { userId: user?.id },
-  });
+  try {
+    return await db.order.findMany({
+      where: { userId: user?.id },
+      include: {
+        orderItems: {
+          include: {
+            product: {
+              include: {
+                images: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const getUserImage = async () => {
+  const session = await auth();
+  const user = session?.user;
+  try {
+    const cureentUser = await db.user.findUnique({
+      where: { id: user?.id },
+    });
+    return cureentUser?.image;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const getOrder = async (id: string) => {
+  try {
+    return await db.order.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        orderItems: {
+          include: {
+            product: {
+              include: {
+                images: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const getSimilarProducts = async (categories: string[]) => {
+  try {
+    const similarProducts: SingleProduct[] = [];
+
+    const productPromises = categories.map(async (category) => {
+      const products = await db.product.findMany({
+        where: {
+          categories: {
+            has: category,
+          },
+        },
+        include: {
+          images: true,
+        },
+      });
+      return products;
+    });
+
+    const productResults = await Promise.all(productPromises);
+    productResults.forEach((products) => {
+      similarProducts.push(...products);
+    });
+
+    return similarProducts;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const getProductReviews = async (productId: string) => {
+  try {
+    return await db.review.findMany({
+      where: {
+        productId,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getProductInOrder = async (productId: string) => {
+  const session = await auth();
+  const user = session?.user;
+  if (!user) return null;
+  try {
+    return await db.order.findFirst({
+      where: {
+        userId: user.id,
+        orderItems: {
+          some: {
+            productId,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const getAllReviews = async () => {
+  try {
+    return await db.review.findMany({
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const getAllCustomers = async () => {
+  try {
+    return await db.shippingAddress.findMany({});
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const getAllOrders = async () => {
+  try {
+    return await db.order.findMany({
+      include: {
+        orderItems: {
+          include: {
+            product: {
+              include: {
+                images: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const getAllSales = async () => {
+  try {
+    return await db.order.findMany({
+      where: {
+        isPaid: true
+      },
+      select: {
+        amount: true,
+        updatedAt: true,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const getCustomers = async () => {
+ 
+  try {
+    return await db.user.findMany({
+      where: {
+        order: {
+          some: {
+            isPaid: true,
+           
+          },
+        },
+      },
+
+      select: {
+        id: true,
+        order:{
+          select:{
+            updatedAt:true
+          }
+        }
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };

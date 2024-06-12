@@ -1,3 +1,7 @@
+import { Suspense } from "react";
+import { BestSellingChart } from "./BestSellingChart";
+import { CustomersChart } from "./CustomersChart";
+import { SalesChart } from "./SalesChart";
 
 export const Dashboard = () => {
   return (
@@ -13,6 +17,8 @@ export const Dashboard = () => {
             </div>
             <b className="text-neutral-black font-bold text-2xl">$4,235</b>
           </div>
+
+          <SalesChart />
         </div>
         <div className="customers h-[190px] p-6 bg-white border border-slate-200 rounded-md">
           <div className="flex justify-between items-center">
@@ -24,9 +30,10 @@ export const Dashboard = () => {
             </div>
             <b className="text-neutral-black font-bold text-2xl">2235</b>
           </div>
+          <CustomersChart />
         </div>
         <div className="orders h-[190px] p-6 bg-white border border-slate-200 rounded-md">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center mb-14">
             <div className="space-y-1.5">
               <h5 className="text-[16px] text-neutral-black font-semibold">
                 Orders
@@ -37,11 +44,16 @@ export const Dashboard = () => {
             </div>
             <b className="text-neutral-black font-bold text-2xl">724</b>
           </div>
+
+          <span className="text-xs font-medium text-neutral-500">266 Left</span>
+          <div className="w-full h-2 rounded-xl bg-W100 mb-2">
+            <div className="bg-[#4078FF] w-[72.4%] h-full rounded-xl" />
+          </div>
         </div>
       </div>
 
       <div className="grid grid-cols-[328px,1fr] gap-x-10 mt-10">
-        <div className="bg-white border border-slate-200 rounded-lg">
+        <div className="bg-white border border-slate-200 rounded-lg mb-10">
           <div className="space-y-1.5 p-8">
             <h5 className="text-[16px] text-neutral-black font-semibold">
               Best Selling
@@ -70,12 +82,13 @@ export const Dashboard = () => {
                 <span className="text-neutral-black">$940 Sales</span>{" "}
               </div>
             </div>
-
-            <div className="circle-chart"></div>
+            
+              <BestSellingChart />
+            
           </div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-lg ">
+        <div className="bg-white border border-slate-200 rounded-lg mb-10 ">
           <div className=" flex items-center gap-x-4 mb-5 p-8">
             <h5 className="text-[16px] text-neutral-black font-semibold">
               Recent Orders
@@ -117,9 +130,6 @@ export const Dashboard = () => {
         ))}
       </tbody>
     </table> */}
-        
-
-          
         </div>
       </div>
     </div>
