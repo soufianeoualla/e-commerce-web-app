@@ -1,6 +1,5 @@
 "use client";
 import { getUserOrders } from "@/db/queries";
-import { Product } from "./Product";
 import { useEffect, useState } from "react";
 import { Inbox, Loader } from "lucide-react";
 import { LinkButton } from "@/components/store/LinkButton";
@@ -62,7 +61,7 @@ export const Orders = () => {
               ))}
             </div>
             <div className="space-y-2">
-              <p className="text-neutral-500 text-xs"> Ordered on: {formatDate(order.createdAt)}</p>
+              <p className="text-neutral-500 text-xs"> Ordered on: {formatDate(order.createdAt.toString())}</p>
               <span className="text-neutral-black text-xs font-medium">
                 {formatPrice(order.amount)}
               </span>

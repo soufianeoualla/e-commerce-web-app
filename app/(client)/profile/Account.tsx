@@ -8,9 +8,9 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { FormSucces } from "@/components/auth/FormSucces";
 import { FormError } from "@/components/auth/FormError";
-import { changeAccounDetails } from "@/actions/account";
 import { Label } from "@/components/ui/label";
 import { getUserImage } from "@/db/queries";
+import { changeAccounDetails } from "@/actions/profile";
 export const Account = () => {
   const { data, status } = useSession();
 

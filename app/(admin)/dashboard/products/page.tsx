@@ -1,14 +1,12 @@
 "use client";
 import {
-  ChevronLeft,
-  ChevronRight,
   Loader,
   SearchIcon,
   SquarePen,
   Trash2,
 } from "lucide-react";
 import Link from "next/link";
-import { getAllProducts, getProductBySearch } from "@/db/queries";
+import { getAllProducts } from "@/db/queries";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { SingleProduct } from "@/lib/interfaces";

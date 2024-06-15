@@ -163,6 +163,7 @@ export const getUserOrders = async () => {
             },
           },
         },
+        shippingAddress:true
       },
     });
   } catch (error) {
@@ -201,6 +202,7 @@ export const getOrder = async (id: string) => {
             },
           },
         },
+        shippingAddress:true
       },
     });
   } catch (error) {

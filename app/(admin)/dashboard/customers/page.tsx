@@ -4,10 +4,10 @@ import Pagination from "@/components/Dashboard/Pagination";
 import { Button } from "@/components/ui/button";
 import { getAllCustomers } from "@/db/queries";
 import { ShippingAddress } from "@prisma/client";
-import { Ellipsis, Loader, SearchIcon, Trash2 } from "lucide-react";
+import {  Loader, SearchIcon, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
-export const Page = () => {
+const Page = () => {
   const [id, setId] = useState<string>("");
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const [customers, setCustomers] = useState<
