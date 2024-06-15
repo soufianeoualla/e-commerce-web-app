@@ -26,7 +26,7 @@ model User {
   cart              Cart?
   reviews           Review[]
   shippingAddress   ShippingAddress? @relation(fields: [shippingAddressId], references: [id])
-  shippingAddressId Int?             @unique
+  shippingAddressId String?          @unique
 }
 
 model Account {
@@ -103,7 +103,7 @@ model Image {
 
 model Category {
   id    Int    @id @default(autoincrement())
-  title String
+  title String @unique
 }
 
 model CartItem {
@@ -129,15 +129,16 @@ model OrderItem {
 }
 
 model Order {
-  id                String           @id @default(uuid())
+  id                String          @id @default(uuid())
+  ref               String          @unique
   userId            String
-  createdAt         DateTime         @default(now())
+  createdAt         DateTime        @default(now())
   updatedAt         DateTime?
-  user              User             @relation(fields: [userId], references: [id])
+  user              User            @relation(fields: [userId], references: [id])
   amount            Float
-  isPaid            Boolean          @default(false)
-  shippingAddress   ShippingAddress? @relation(fields: [shippingAddressId], references: [id])
-  shippingAddressId Int?
+  isPaid            Boolean         @default(false)
+  shippingAddress   ShippingAddress @relation(fields: [shippingAddressId], references: [id])
+  shippingAddressId String
   orderItems        OrderItem[]
 }
 
@@ -151,7 +152,7 @@ model Cart {
 }
 
 model ShippingAddress {
-  id            Int     @id @default(autoincrement())
+  id            String  @id @default(uuid())
   streetAddress String
   city          String
   state         String
@@ -160,8 +161,13 @@ model ShippingAddress {
   email         String  @unique
   fullName      String
   orders        Order[]
-  user          User? // This line was modified
+  user          User?
   userId        String?
+}
+
+model OrderGoal {
+  id   Int @id @default(autoincrement())
+  goal Int
 }
 
 model VerificationToken {

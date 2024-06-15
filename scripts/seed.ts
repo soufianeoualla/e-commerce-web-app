@@ -12,6 +12,11 @@ const categories = [
 ];
 
 const main = async () => {
+  await db.orderGoal.create({
+    data: {
+      goal: 500,
+    },
+  });
   await db.category.createMany({
     data: categories.map((item) => ({
       title: item,
@@ -25,6 +30,7 @@ const main = async () => {
           email: faker.internet.email(),
           password: faker.internet.password(),
           role: "user",
+          image: faker.image.avatar(),
         },
       })
     )
@@ -37,18 +43,18 @@ const main = async () => {
         data: {
           images: {
             create: Array.from({ length: 3 }).map(() => ({
-              imageSrc: faker.image.imageUrl(),
+              imageSrc: faker.image.url(),
             })),
           },
           title: faker.commerce.productName(),
           slug: faker.lorem.slug(),
           price: parseFloat(faker.commerce.price()),
-          quantity: faker.datatype.number({ min: 1, max: 100 }),
-          description: faker.lorem.paragraph(),
-          sku: faker.datatype.number(),
-          colors: faker.commerce.color(),
-          sizes: faker.random.arrayElements(["S", "M", "L", "XL"]),
-          categories: faker.random.arrayElements(categories),
+          quantity: faker.number.int({ min: 1, max: 100 }),
+          description: faker.commerce.productDescription(),
+          sku: faker.datatype.number({ min: 1, max: 2147483647 }), // Ensure SKU is within 32-bit integer range
+          colors: [faker.color.hsl({ format: "css" })],
+          sizes: ["S", "M", "L", "XL"],
+          categories: [faker.string.alpha()],
           isFeatured: faker.datatype.boolean(),
         },
       })
@@ -57,7 +63,7 @@ const main = async () => {
 
   // Generate Orders
   const orders = await Promise.all(
-    Array.from({ length: 5 }).map(async () => {
+    Array.from({ length: 10 }).map(async () => {
       const userId =
         users[faker.datatype.number({ min: 0, max: users.length - 1 })].id;
 
@@ -76,6 +82,11 @@ const main = async () => {
 
       return db.order.create({
         data: {
+          updatedAt: faker.date.between({
+            from: "2024-06-01T00:00:00.000Z",
+            to: "2024-06-14T00:00:00.000Z",
+          }),
+          ref: faker.commerce.isbn(),
           userId: userId,
           amount: parseFloat(faker.commerce.price()),
           isPaid: faker.datatype.boolean(),
@@ -84,8 +95,8 @@ const main = async () => {
             create: products.slice(0, 3).map((product) => ({
               productId: product.id,
               quantity: faker.datatype.number({ min: 1, max: 5 }),
-              color: faker.commerce.color(),
-              size: faker.random.arrayElement(["S", "M", "L", "XL"]),
+              color: faker.color.hsl({ format: "css" }),
+              size: "S",
             })),
           },
         },

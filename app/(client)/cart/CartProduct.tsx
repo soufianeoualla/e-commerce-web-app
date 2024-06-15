@@ -25,7 +25,7 @@ export const CartProductCard = ({
         <div className="flex justify-center items-center bg-W100 rounded-sm w-20 h-20">
           <Image
             src={ cartItem.product.images[0].imageSrc}
-            alt="tee"
+            alt={cartItem.product.title}
             width={44}
             height={62}
           />

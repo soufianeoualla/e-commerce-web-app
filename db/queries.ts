@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { db } from "./db";
 import { cache } from "react";
 import { SingleProduct } from "@/lib/interfaces";
+import dayjs from "dayjs";
 
 export const getAllProducts = cache(async () => {
   return await db.product.findMany({
@@ -28,7 +29,7 @@ export const getProductBySearch = async (title: string) => {
   try {
     return await db.product.findMany({
       where: {
-        slug: {
+        title: {
           contains: title,
         },
       },
@@ -317,6 +318,7 @@ export const getAllOrders = async () => {
             },
           },
         },
+        shippingAddress: true,
       },
     });
   } catch (error) {
@@ -329,7 +331,10 @@ export const getAllSales = async () => {
   try {
     return await db.order.findMany({
       where: {
-        isPaid: true
+        isPaid: true,
+        updatedAt: {
+          not: null,
+        },
       },
       select: {
         amount: true,
@@ -343,29 +348,64 @@ export const getAllSales = async () => {
 };
 
 export const getCustomers = async () => {
- 
   try {
     return await db.user.findMany({
       where: {
         order: {
           some: {
             isPaid: true,
-           
+            updatedAt: {
+              not: null,
+            },
           },
         },
       },
 
       select: {
         id: true,
-        order:{
-          select:{
-            updatedAt:true
-          }
-        }
+        order: {
+          select: {
+            updatedAt: true,
+          },
+        },
       },
     });
   } catch (error) {
     console.log(error);
     return null;
   }
+};
+
+export const getOrderItems = async () => {
+  const startOfMonth = dayjs().startOf("month").toDate();
+  const endOfMonth = dayjs().endOf("month").toDate();
+  try {
+    return await db.orderItem.findMany({
+      where: {
+        order: {
+          isPaid: true,
+          updatedAt: {
+            gte: startOfMonth,
+            lte: endOfMonth,
+          },
+        },
+      },
+      select: {
+        productId: true,
+        quantity: true,
+        product: {
+          select: {
+            price: true,
+            title: true,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+export const getOrdersGaol = async () => {
+  return await db.orderGoal.findFirst();
 };

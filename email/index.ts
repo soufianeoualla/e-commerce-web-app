@@ -18,3 +18,5 @@ export const sendVerificationEmail = async (
     react: WelcomeTemplate({ name, confirmationLink: link }),
   });
 };
+
+

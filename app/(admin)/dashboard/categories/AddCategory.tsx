@@ -1,5 +1,5 @@
 "use client";
-import { addNewCatgeory } from "@/actions/addCategory";
+import { addNewCatgeory } from "@/actions/dashboard";
 import { FormError } from "@/components/auth/FormError";
 import { FormSucces } from "@/components/auth/FormSucces";
 import { Button } from "@/components/ui/button";
@@ -23,11 +23,13 @@ export const AddCategory = () => {
 
   const handleSubmit = () => {
     if (!category) return setError("Category is required");
-    startTransition(() => {
-      addNewCatgeory(category).then((data) => {
-        setError(data?.error);
-        setSuccess(data?.success);
-      });
+    startTransition(async () => {
+      const data = await addNewCatgeory(category);
+      if (data.success) {
+        setSuccess(data.success);
+      } else {
+        setError(data.error);
+      }
     });
   };
 
@@ -51,9 +53,8 @@ export const AddCategory = () => {
             />
           </div>
           {error && <FormError message={error} />}
-            {success && <FormSucces message={success} />}
+          {success && <FormSucces message={success} />}
           <DialogFooter className="">
-            
             <Button
               disabled={isPending}
               onClick={handleSubmit}

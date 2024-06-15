@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import { Footer } from "@/components/store/Footer";
 import { NewsLetter } from "@/components/store/NewsLetter";
 import { CartProvider } from "@/context/CartContext";
-import { SonnerProvider } from "@/context/SonnerContext";
 import { Header } from "@/components/store/Header";
 const inter = Inter({ subsets: ["latin"] });
 import { SessionProvider } from "next-auth/react";
@@ -22,18 +21,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SonnerProvider>
-          <SessionProvider>
-            <WishlistProvider>
-              <CartProvider>
-                <Header />
-                {children}
-              </CartProvider>
-            </WishlistProvider>
-          </SessionProvider>
-          <NewsLetter />
-          <Footer />
-        </SonnerProvider>
+        <SessionProvider>
+          <WishlistProvider>
+            <CartProvider>
+              <Header />
+              {children}
+            </CartProvider>
+          </WishlistProvider>
+        </SessionProvider>
+        <NewsLetter />
+        <Footer />
       </body>
     </html>
   );

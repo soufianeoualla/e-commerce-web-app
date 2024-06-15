@@ -19,7 +19,7 @@ export interface SingleProduct {
   sizes: string[];
   images: Image[];
   categories: string[];
-  isFeatured: Boolean;
+  isFeatured: boolean;
 }
 
 export type CartItem = {
@@ -51,11 +51,13 @@ export interface OrderItem {
 }
 
 export interface Order {
+  ref: string;
   id: string;
   createdAt: Date;
   amount: number;
-  isPaid: Boolean;
+  isPaid: boolean;
   userId: string;
+  shippingAddress: ShippingAddress;
   orderItems: OrderItem[];
 }
 
@@ -83,5 +85,3 @@ export interface Review {
     name: string;
   };
 }
-
-

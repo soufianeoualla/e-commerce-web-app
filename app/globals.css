@@ -13,6 +13,11 @@ td {
   font-weight: 500;
   text-transform: capitalize;
 }
+th{
+  font-weight: 600;
+  color: rgb(14 20 34);
+
+}
 
 td {
   margin-top: 10px;
@@ -37,6 +42,11 @@ input[type="number"] {
 
 .track-1 {
   background: rgb(14 20 34);
+}
+
+.order-image:not(:first-child){
+  position: relative;
+  transform: translateX(-26px);
 }
 @layer base {
   :root {

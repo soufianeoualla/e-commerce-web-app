@@ -29,6 +29,28 @@ export async function POST(req: Request) {
       if (!orderId || !userId) {
         throw new Error("Invalid request metadata");
       }
+
+      const order = await db.order.update({
+        where: {
+          id: orderId,
+        },
+        data: {
+          isPaid: true,
+          updatedAt: new Date(),
+        },
+      });
+      await db.cart.update({
+        where: {
+          userId: order.userId,
+        },
+        data: {
+          total: 0,
+          quantity: 0,
+          cartItems: {
+            deleteMany: {},
+          },
+        },
+      });
     }
     return NextResponse.json({ result: event, ok: true });
   } catch (error) {

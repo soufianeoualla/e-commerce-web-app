@@ -7,6 +7,7 @@ import { stripe } from "@/lib/stripe";
 import { ShippingAddressSchema } from "@/schemas";
 import { Order } from "@prisma/client";
 import { z } from "zod";
+import { v4 as uuid } from "uuid";
 
 export const createCheckoutSession = async (
   values: z.infer<typeof ShippingAddressSchema>
@@ -23,7 +24,7 @@ export const createCheckoutSession = async (
   if (!cart) return { error: "cart is empty" };
   const orders = await getUserOrders();
   let order: Order | undefined = undefined;
-  const alreadyOrdered = orders.some((order) => order.isPaid === true);
+  const alreadyOrdered = orders!.some((order) => order.isPaid === true);
   const totalPrice =
     !orders || !alreadyOrdered
       ? cart?.total - (cart?.total * 25) / 100
@@ -38,15 +39,22 @@ export const createCheckoutSession = async (
   if (existingOrder) {
     order = existingOrder;
   } else {
+    const timestamp = Date.now().toString(36);
+    const randomString = Math.random().toString(36).substring(2, 10);
+    const ref = `${timestamp}-${randomString}`.toUpperCase();
     const shippingAddress = await db.shippingAddress.create({
       data: { city, country, email, fullName, state, streetAddress, zipCode },
     });
+    
     order = await db.order.create({
       data: {
+        ref,
         orderItems: {
           create: cart.cartItems.map((item) => ({
             productId: item.productId,
             quantity: item.quantity,
+            color: item.color,
+            size: item.size,
           })),
         },
         shippingAddressId: shippingAddress.id,
@@ -74,7 +82,6 @@ export const createCheckoutSession = async (
     lineItems.push({
       price: createdPrice.id,
       quantity: product.quantity,
-      
     });
   }
 

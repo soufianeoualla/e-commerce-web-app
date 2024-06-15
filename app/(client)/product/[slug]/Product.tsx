@@ -6,10 +6,10 @@ import { FaStar } from "react-icons/fa6";
 import { ImageSlider } from "./ImageSlider";
 import { cn, sizes } from "@/lib/utils";
 import { CartContext } from "@/context/CartContext";
-import { SonnerContext } from "@/context/SonnerContext";
 import { Button } from "@/components/ui/button";
 import { WishlistContext } from "@/context/WishlistContext";
 import { FormError } from "@/components/auth/FormError";
+import { useToast } from "@/components/ui/use-toast";
 
 type Props = {
   product: SingleProduct;
@@ -21,13 +21,13 @@ export const Product = ({ product, reviews }: Props) => {
   const [selectedSize, setSelectedSize] = useState<number | undefined>();
   const [quantity, setQuantity] = useState<number>(1);
   const [error, setError] = useState<string | undefined>("");
+  const { toast } = useToast();
 
   const { addProduct } = useContext(CartContext);
   const { wishlist, handleWishlist } = useContext(WishlistContext);
   const isExist = wishlist.products.some(
     (item) => item.productId === product.id
   );
-  const { handleSonner } = useContext(SonnerContext);
 
   const handleAddToCart = () => {
     if (!selectedSize) return setError("All fields are required");
@@ -37,7 +37,9 @@ export const Product = ({ product, reviews }: Props) => {
       sizes[selectedSize].title,
       product!.colors[selectedColor]
     );
-    handleSonner("item add to cart");
+    toast({
+      description: "Item added to your cart",
+    });
   };
   const overallRating =
     reviews.length > 0
@@ -141,9 +143,8 @@ export const Product = ({ product, reviews }: Props) => {
             </button>
           </div>
         </div>
-          {error && <FormError message={error} classname="w-[284px]" />}
+        {error && <FormError message={error} classname="w-[284px]" />}
         <div className=" flex  items-center gap-x-4 mb-3 ">
-
           <button
             onClick={handleAddToCart}
             className="bg-neutral-black  h-11 w-[284px] text-white font-medium rounded-md hover:bg-opacity-80"

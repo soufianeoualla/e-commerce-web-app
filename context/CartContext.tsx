@@ -74,12 +74,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         setCart(cartData);
       };
       fetchData();
-    }else return
+    } else return;
   }, [status, updateTrigger]);
 
   useEffect(() => {
     if (status === "authenticated") {
-      localStorage.removeItem("cart");
     } else {
       localStorage.setItem("cart", JSON.stringify(cart));
     }
@@ -107,7 +106,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       ) {
         newState.cartItems[productIndex].quantity += quantity;
         newState.quantity += quantity;
-        newState.total += product.price;
+        newState.total += product.price * quantity;
       } else {
         const cartItem = {
           product,

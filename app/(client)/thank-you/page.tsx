@@ -95,7 +95,9 @@ const Page = () => {
             </div>
           </div>
         </div>
-        <button className=" bg-black w-full h-14 text-white text-base rounded-lg font-bold tracking-wider mt-12 hover:bg-primary/80 sm:mt-8">
+        <button
+        onClick={()=>router.push("/")}
+        className=" bg-black w-full h-14 text-white text-base rounded-lg font-bold tracking-wider mt-12 hover:bg-primary/80 sm:mt-8">
           CONTINUE SHOPPING
         </button>
       </div>

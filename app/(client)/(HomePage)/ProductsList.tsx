@@ -13,7 +13,7 @@ export const ProductsList = ({ classname, products }: Props) => {
   return (
     <div
       className={cn(
-        `max-w-[1116px] flex gap-x-12 items-start flex-wrap `,
+        `max-w-[1116px] flex gap-12 items-start flex-wrap `,
         classname
       )}
     >
