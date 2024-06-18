@@ -4,15 +4,13 @@ import Pagination from "@/components/Dashboard/Pagination";
 import { Button } from "@/components/ui/button";
 import { getAllCustomers } from "@/db/queries";
 import { ShippingAddress } from "@prisma/client";
-import {  Loader, SearchIcon, Trash2 } from "lucide-react";
+import { Loader, SearchIcon, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 const Page = () => {
   const [id, setId] = useState<string>("");
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
-  const [customers, setCustomers] = useState<
-    ShippingAddress[] | null | undefined
-  >();
+  const [customers, setCustomers] = useState<ShippingAddress[] | null>();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
   const lastItemIndex = currentPage * itemsPerPage;
@@ -23,6 +21,7 @@ const Page = () => {
     const getData = async () => {
       const data = await getAllCustomers();
       setCustomers(data);
+      console.log(data);
     };
     getData();
   }, []);
@@ -34,7 +33,7 @@ const Page = () => {
       </div>
     );
   const filtredCustomers = query
-    ? customers.filter((item) => item.fullName.toLowerCase().includes(query))
+    ? customers.filter((item) => item.fullName!.toLowerCase().includes(query))
     : customers;
   const currentItems = filtredCustomers?.slice(firstItemIndex, lastItemIndex);
   const pageNumbers = [];

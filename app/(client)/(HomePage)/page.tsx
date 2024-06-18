@@ -4,6 +4,7 @@ import { Features } from "./Features";
 import { Banner } from "./Banner";
 import { ProductCategory } from "./ProductCategory";
 import type { Metadata } from "next";
+import { BestSelling } from "./BestSelling";
 
 export const metadata: Metadata = {
   title: "Ecommerce",
@@ -15,7 +16,9 @@ const page = () => {
       <Hero />
       <div className="max-w-[1116px] mx-auto">
         <Features />
-        {/* <BestSelling products={bestSelling} /> */}
+        <Suspense>
+          <BestSelling />
+        </Suspense>
       </div>
       <Banner />
       <Suspense>

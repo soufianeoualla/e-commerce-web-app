@@ -11,6 +11,9 @@ export const getAllProducts = cache(async () => {
     include: {
       images: true,
     },
+    orderBy: {
+      addedAt: "desc",
+    },
   });
 });
 
@@ -163,7 +166,7 @@ export const getUserOrders = async () => {
             },
           },
         },
-        shippingAddress:true
+        shippingAddress: true,
       },
     });
   } catch (error) {
@@ -202,7 +205,7 @@ export const getOrder = async (id: string) => {
             },
           },
         },
-        shippingAddress:true
+        shippingAddress: true,
       },
     });
   } catch (error) {
@@ -291,6 +294,9 @@ export const getAllReviews = async () => {
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
   } catch (error) {
     console.log(error);
@@ -300,7 +306,15 @@ export const getAllReviews = async () => {
 
 export const getAllCustomers = async () => {
   try {
-    return await db.shippingAddress.findMany({});
+    const customers = await db.shippingAddress.findMany({
+      orderBy: {
+        user: {
+          emailVerified: "desc",
+        },
+      },
+    });
+
+    return customers;
   } catch (error) {
     console.log(error);
     return null;
@@ -321,6 +335,9 @@ export const getAllOrders = async () => {
           },
         },
         shippingAddress: true,
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
   } catch (error) {
@@ -378,7 +395,7 @@ export const getCustomers = async () => {
   }
 };
 
-export const getOrderItems = async () => {
+export const getBestSelling = async () => {
   const startOfMonth = dayjs().startOf("month").toDate();
   const endOfMonth = dayjs().endOf("month").toDate();
   try {
@@ -410,4 +427,50 @@ export const getOrderItems = async () => {
 };
 export const getOrdersGaol = async () => {
   return await db.orderGoal.findFirst();
+};
+
+export const getBestSellingProducts = async () => {
+  const startOfMonth = dayjs().startOf("month").toDate();
+  const endOfMonth = dayjs().endOf("month").toDate();
+  try {
+    return await db.orderItem.findMany({
+      where: {
+        order: {
+          isPaid: true,
+          updatedAt: {
+            gte: startOfMonth,
+            lte: endOfMonth,
+          },
+        },
+      },
+      include: {
+        product: {
+          include: {
+            images: true,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const isFirstOrder = async () => {
+  const session = await auth();
+  const user = session?.user;
+  if (!user) return null;
+  try {
+    const order = await db.order.findFirst({
+      where: {
+        userId: user.id,
+        isPaid: true,
+      },
+    });
+    return !order;
+  } catch (error) {
+    console.log(error);
+    return true;
+  }
 };

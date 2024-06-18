@@ -1,7 +1,12 @@
 import { ResetPassword } from "@/components/auth/ResetPassword";
 import { BreadcrumbWithCustomSeparator } from "@/components/store/BreadCrumb";
+import { Metadata } from "next";
 import React from "react";
 
+export const metadata: Metadata = {
+  title: "Reset Password",
+  description: "Reset Password Page",
+};
 const page = () => {
   return (
     <main>

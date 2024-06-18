@@ -11,7 +11,7 @@ export const addShippingAddress = async (
 ) => {
   const session = await auth();
   const user = session?.user;
-  if (!user) return;
+  if (!user) return { error: "Please logged in" };
   const validateFields = ShippingAddressSchema.safeParse(values);
   if (!validateFields.success) {
     return { error: "Invalid fields" };
@@ -22,7 +22,7 @@ export const addShippingAddress = async (
   });
 
   if (existingAddress) {
-    return await db.shippingAddress.update({
+    await db.shippingAddress.update({
       where: { id: existingAddress.id },
       data: {
         city,
@@ -32,20 +32,23 @@ export const addShippingAddress = async (
         zipCode,
       },
     });
+  } else {
+    await db.shippingAddress.create({
+      data: {
+        city,
+        country,
+        state,
+        streetAddress,
+        zipCode,
+        email: user?.email!,
+        fullName: user?.name!,
+      },
+    });
   }
 
-  await db.shippingAddress.create({
-    data: {
-      city,
-      country,
-      state,
-      streetAddress,
-      zipCode,
-      email: user?.email!,
-      fullName: user?.name!,
-    },
-  });
+  return { success: "Your address has been added successfully" };
 };
+
 export const changePassword = async (
   values: z.infer<typeof changePasswordSchema>
 ) => {
@@ -63,16 +66,15 @@ export const changePassword = async (
     oldPassword,
     existingUser.password!
   );
-  if (!passwordMatch) return {error:'Wrong Password'} 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    await db.user.update({
-      where: { id: existingUser.id },
-      data: {
-        password: hashedPassword,
-      },
-    });
-    return { success: "Password has been changed successfully" };
-
+  if (!passwordMatch) return { error: "Wrong Password" };
+  const hashedPassword = await bcrypt.hash(password, 10);
+  await db.user.update({
+    where: { id: existingUser.id },
+    data: {
+      password: hashedPassword,
+    },
+  });
+  return { success: "Password has been changed successfully" };
 };
 
 export const changeAccounDetails = async (
@@ -92,8 +94,6 @@ export const changeAccounDetails = async (
   const session = await auth();
   const user = session?.user;
   if (!user) return { error: "Please logged in" };
-
-  
 
   try {
     await db.user.update({

@@ -4,6 +4,8 @@ import { Summary } from "./Summary";
 import { useContext } from "react";
 import { CartContext } from "@/context/CartContext";
 import { BreadcrumbWithCustomSeparator } from "@/components/store/BreadCrumb";
+
+
 const CartPage = () => {
   const { cart } = useContext(CartContext);
   const cartItems = cart.cartItems;

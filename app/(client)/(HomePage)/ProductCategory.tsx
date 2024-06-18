@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
 import { Products } from "./Products";
 import { Categories } from "./Categories";
 export const ProductCategory = () => {

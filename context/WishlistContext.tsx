@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { handleUserWishlist } from "@/actions/wishlist";
 import { getUserWishlist } from "@/db/queries";
 import { SingleProduct, WishlistTypes } from "@/lib/interfaces";
@@ -6,24 +6,18 @@ import { useSession } from "next-auth/react";
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 
+const initialWishlist = {
+  id: 0,
+  userId: "xxxxx",
+  products: [],
+};
+
 const getSavedWishlist = () => {
   if (typeof window !== "undefined") {
     const savedWishlist = localStorage.getItem("wishlist");
-    if (savedWishlist) {
-      return JSON.parse(savedWishlist);
-    } else {
-      return {
-        id: 0,
-        userId: "xxxxx",
-        products: [],
-      };
-    }
+    savedWishlist ? JSON.parse(savedWishlist) : initialWishlist;
   }
-  return {
-    id: 0,
-    userId: "xxxxx",
-    products: [],
-  };
+  return initialWishlist;
 };
 
 type ContextProps = {
@@ -32,7 +26,7 @@ type ContextProps = {
 };
 
 export const WishlistContext = createContext<ContextProps>({
-  wishlist: { id: 0, userId: "xxxxx", products: [] },
+  wishlist: initialWishlist,
   handleWishlist: () => {},
 });
 
@@ -49,8 +43,9 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
         setWishlist(cartData);
       };
       fetchData();
+      localStorage.removeItem("wishlist");
     }
-  }, [status,updateTrigger]);
+  }, [status, updateTrigger]);
 
   useEffect(() => {
     if (status !== "authenticated") {
@@ -61,25 +56,25 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
   const handleWishlist = (product: SingleProduct) => {
     if (status === "authenticated") {
       handleUserWishlist(product.id);
-      return setupdateTrigger(Math.random() * 100);
-    }
-
-    const newState = { ...wishlist };
-
-    const isExist = newState.products.some(
-      (item) => item.productId === product.id
-    );
-    if (isExist) {
-      newState.products.filter((item) => item.productId !== product.id);
     } else {
-      const newProduct = {
-        product,
-        id: uuid(),
-        wishlistId: 0,
-        productId: product.id,
-      };
-      newState.products.push(newProduct);
+      const newState = { ...wishlist };
+
+      const isExist = newState.products.some(
+        (item) => item.productId === product.id
+      );
+      if (isExist) {
+        newState.products.filter((item) => item.productId !== product.id);
+      } else {
+        const newProduct = {
+          product,
+          id: uuid(),
+          wishlistId: 0,
+          productId: product.id,
+        };
+        newState.products.push(newProduct);
+      }
     }
+    setupdateTrigger(Math.random() * 100);
   };
 
   return (

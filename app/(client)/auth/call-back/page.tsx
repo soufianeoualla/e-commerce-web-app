@@ -2,17 +2,14 @@
 import { addtoCart } from "@/actions/cart";
 import { CartContext } from "@/context/CartContext";
 import { Loader } from "lucide-react";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect } from "react";
 
 const Page = () => {
   const { cart } = useContext(CartContext);
   const router = useRouter();
-  const { status } = useSession();
 
   useEffect(() => {
-    if (status === "unauthenticated") return;
     if (!cart.cartItems || cart.cartItems.length === 0) {
       return router.push("/");
     }
@@ -23,8 +20,8 @@ const Page = () => {
     });
     localStorage.removeItem("cart");
 
-    return router.push("/cart");
-  }, [cart, router, status]);
+    return router.push("/checkout");
+  }, [cart, router]);
   return (
     <div className="w-full mt-24 flex justify-center h-screen">
       <div className="flex items-center flex-col gap-2">

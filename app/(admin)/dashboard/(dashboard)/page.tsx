@@ -7,7 +7,7 @@ import {
   getAllOrders,
   getAllSales,
   getCustomers,
-  getOrderItems,
+  getBestSelling,
   getOrdersGaol,
 } from "@/db/queries";
 import Image from "next/image";
@@ -50,7 +50,7 @@ const Page = () => {
       setSales(saleData);
       const customersData = await getCustomers();
       setCustomers(customersData);
-      const orderItemsData = await getOrderItems();
+      const orderItemsData = await getBestSelling();
       setOrderItems(orderItemsData);
       const OrdersData = await getAllOrders();
       setOrders(OrdersData);
@@ -61,7 +61,6 @@ const Page = () => {
   }, []);
 
   const paidOrders = orders?.filter((item) => item.isPaid === true);
-  
 
   return (
     <>

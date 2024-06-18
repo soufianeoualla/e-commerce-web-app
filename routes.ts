@@ -1,8 +1,7 @@
 export const authRoutes = ["/auth/login", "/auth/register", "/auth/error"];
-
-export const apiAuthRoutes = "/api/auth";
-export const adminRoute ='/dashboard'
-export const profileRoute = '/profile'
+export const apiRoutes = "/api";
+export const adminRoute = "/dashboard";
+export const profileRoute = "/profile";
 export const publicRoutes = [
   "/",
   "/product/",

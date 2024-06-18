@@ -1,8 +1,12 @@
 import { BreadcrumbWithCustomSeparator } from "@/components/store/BreadCrumb";
 import { CheckoutForm } from "./CheckoutForm";
+import { Metadata } from "next";
 
 
-
+export const metadata: Metadata = {
+  title: "Checkout",
+  description: "Checkout Page",
+};
 const page = () => {
 
   return (

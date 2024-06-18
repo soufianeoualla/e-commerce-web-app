@@ -11,9 +11,8 @@ type Props = {
 };
 
 export const Summary = ({ subtotal }: Props) => {
- 
   const { status } = useSession();
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <div className="w-[341px] py-8 px-6 rounded-md border border-slate-200 text-neutral-500">
@@ -21,22 +20,16 @@ export const Summary = ({ subtotal }: Props) => {
         Order Summary
       </h1>
       <TotalPrice subtotal={subtotal} />
-      {status === "authenticated" ? (
-        <Button
-        onClick={() => router.push("/checkout")}
-
-          className=" w-full  bg-neutral-black text-white font-medium my-8 h-11 rounded-md  hover:bg-opacity-90 "
-        >
-          {"Checkout"}
-        </Button>
-      ) : (
-        <Button
-          onClick={() => router.push("/auth/login")}
-          className=" w-full  bg-neutral-black text-white font-medium my-8 h-11 rounded-md  hover:bg-opacity-90 "
-        >
-          Please Log In
-        </Button>
-      )}
+      <Button
+        onClick={() => {
+          status === "authenticated"
+            ? router.push("/checkout")
+            : router.push("/auth/login");
+        }}
+        className=" w-full  bg-neutral-black text-white font-medium my-8 h-11 rounded-md  hover:bg-opacity-90 "
+      >
+        {"Checkout"}
+      </Button>
       <Link
         href={"/"}
         className="flex justify-center items-center underline text-neutral-500 hover:text-neutral-black font-medium text-xs "

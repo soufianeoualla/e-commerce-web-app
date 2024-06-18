@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { WishlistContext } from "@/context/WishlistContext";
 import { FormError } from "@/components/auth/FormError";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 type Props = {
   product: SingleProduct;
@@ -22,6 +23,7 @@ export const Product = ({ product, reviews }: Props) => {
   const [quantity, setQuantity] = useState<number>(1);
   const [error, setError] = useState<string | undefined>("");
   const { toast } = useToast();
+  const router = useRouter();
 
   const { addProduct } = useContext(CartContext);
   const { wishlist, handleWishlist } = useContext(WishlistContext);

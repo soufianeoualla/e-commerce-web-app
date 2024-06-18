@@ -3,6 +3,8 @@ import { PageWrapper } from "./PageWrapper";
 import { Suspense, useState } from "react";
 import { BreadcrumbWithCustomSeparator } from "@/components/store/BreadCrumb";
 import Filters from "./Filters";
+import { Metadata } from "next";
+
 const Page = () => {
   const [categories, setCategories] = useState<string[]>([]);
   const [color, setColor] = useState<number | undefined>(undefined);

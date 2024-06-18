@@ -7,7 +7,7 @@ import { formatDate, formatPrice } from "@/lib/utils";
 import { Eye, Loader, SearchIcon, Trash2 } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { OrderSummary } from "./OrderSummary";
+import { OrderSummary } from "@/components/OrderSummary";
 import Pagination from "@/components/Dashboard/Pagination";
 
 const Page = () => {

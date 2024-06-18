@@ -1,6 +1,13 @@
 import { CardWrapper } from "@/components/auth/CardWrapper";
 import { BreadcrumbWithCustomSeparator } from "@/components/store/BreadCrumb";
+import { Metadata } from "next";
 import React from "react";
+
+
+export const metadata: Metadata = {
+  title: "Login",
+  description: "Login Page",
+};
 
 const page = () => {
   return (

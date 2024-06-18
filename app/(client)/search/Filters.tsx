@@ -12,7 +12,7 @@ type Props = {
   color: number | undefined;
   setColor: Dispatch<SetStateAction<number | undefined>>;
   size: number | undefined;
-  setSize: Dispatch<SetStateAction<number | undefined>>
+  setSize: Dispatch<SetStateAction<number | undefined>>;
   values: [number, number];
   setValues: Dispatch<SetStateAction<[number, number]>>;
 };
@@ -47,6 +47,22 @@ const Filters = ({
     if (isExisting(item)) {
       setCategories(categories?.filter((category) => category !== item));
     } else setCategories(categories ? [...categories, item] : [item]);
+  };
+
+  const handleColor = (index: number) => {
+    if (typeof color === "number") {
+      setColor(undefined);
+    } else {
+      setColor(index);
+    }
+  };
+
+  const handleSize = (index: number) => {
+    if (typeof size === "number") {
+      setSize(undefined);
+    } else {
+      setSize(index);
+    }
   };
 
   return (
@@ -92,9 +108,7 @@ const Filters = ({
               )}
             >
               <button
-                onClick={() => {
-                  setColor(index);
-                }}
+                onClick={() => handleColor(index)}
                 type="button"
                 key={item.id}
                 style={{ background: item.hexCode }}
@@ -111,9 +125,7 @@ const Filters = ({
           {sizes.map((item, index) => (
             <button
               type="button"
-              onClick={() => {
-                setSize(index);
-              }}
+              onClick={() => handleSize(index)}
               key={item.id}
               className={cn(
                 "w-10 h-10 border border-slate-200 flex justify-center items-center rounded-md hover:bg-W100 hover:border-neutral-black/50",

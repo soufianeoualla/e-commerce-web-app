@@ -15,9 +15,11 @@ import { Input } from "@/components/ui/input";
 import { ShippingAddressSchema } from "@/schemas";
 import { Order } from "./Order";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { createCheckoutSession } from "@/actions/checkout";
 import { useToast } from "@/components/ui/use-toast";
+import { ShippingAddress } from "@prisma/client";
+import { getUserShippingAddress } from "@/db/queries";
 export const CheckoutForm = () => {
   const { toast } = useToast();
   const form = useForm<z.infer<typeof ShippingAddressSchema>>({
@@ -33,7 +35,27 @@ export const CheckoutForm = () => {
     },
   });
   const [isPending, startTransition] = useTransition();
+
   const router = useRouter();
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getUserShippingAddress();
+      if (data) {
+        form.reset({
+          city: data.city,
+          country: data.country,
+          email: data.email,
+          fullName: data.fullName,
+          state: data.state,
+          streetAddress: data.streetAddress,
+          zipCode: data.zipCode,
+        });
+      }
+    };
+    getData();
+  }, [form]);
+
   const handleCheckout = (values: z.infer<typeof ShippingAddressSchema>) => {
     startTransition(async () => {
       const data = await createCheckoutSession(values);

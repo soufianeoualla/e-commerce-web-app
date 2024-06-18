@@ -15,34 +15,48 @@ import { ShippingAddressSchema } from "@/schemas";
 import { useEffect, useState, useTransition } from "react";
 import { addShippingAddress } from "@/actions/profile";
 import { Button } from "@/components/ui/button";
-import { ShippingAddress } from "@prisma/client";
 import { getUserShippingAddress } from "@/db/queries";
+import { FormSucces } from "@/components/auth/FormSucces";
+import { FormError } from "@/components/auth/FormError";
 export const Address = () => {
-  const [address, setAddress] = useState<ShippingAddress | null>();
-  useEffect(() => {
-    const getData = async () => {
-      const userAddress = await getUserShippingAddress();
-      setAddress(userAddress);
-    };
-    getData()
-  }, []);
-
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
   const form = useForm<z.infer<typeof ShippingAddressSchema>>({
     resolver: zodResolver(ShippingAddressSchema),
     defaultValues: {
-      city: address ? address.city : "",
-      country: address ? address.country : "",
-      state: address ? address.state : "",
-      streetAddress: address ? address.streetAddress : "",
-      zipCode: address ? address.zipCode : undefined,
+      city: "",
+      country: "",
+      state: "",
+      streetAddress: "",
+      zipCode: undefined,
     },
   });
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getUserShippingAddress();
+      if (data) {
+        form.reset({
+          city: data.city,
+          country: data.country,
+          email: data.email,
+          fullName: data.fullName,
+          state: data.state,
+          streetAddress: data.streetAddress,
+          zipCode: data.zipCode,
+        });
+      }
+    };
+    getData();
+  }, [form]);
 
   const [isPending, startTransition] = useTransition();
 
   const handleSave = (values: z.infer<typeof ShippingAddressSchema>) => {
     startTransition(() => {
-      addShippingAddress(values);
+      addShippingAddress(values).then((data) => {
+        setError(data?.error);
+        setSuccess(data?.success);
+      });
     });
   };
 
@@ -144,14 +158,15 @@ export const Address = () => {
               )}
             />
           </div>
+          {success && <FormSucces message={success} />}
+          {error && <FormError message={error} />}
+          <Button
+            disabled={isPending}
+            className="bg-neutral-black text-white font-medium h-11 rounded px-6 mt-16 hover:bg-opacity-80"
+          >
+            Save Changes
+          </Button>
         </form>
-
-        <Button
-          disabled={isPending}
-          className="bg-neutral-black text-white font-medium h-11 rounded px-6 mt-16 hover:bg-opacity-80"
-        >
-          Save Changes
-        </Button>
       </Form>
     </section>
   );

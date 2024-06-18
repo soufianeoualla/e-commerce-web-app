@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Wishlist } from "./Wishlist";
 import { BreadcrumbWithCustomSeparator } from "@/components/store/BreadCrumb";
 
+
 const ProfilePage = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
   const menuComponents = [

@@ -11,28 +11,20 @@ import { useSession } from "next-auth/react";
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 
+const initialCart = {
+  id: "xxxx",
+  userId: "xxxxx",
+  cartItems: [],
+  total: 0,
+  quantity: 0,
+};
+
 const getSavedCart = () => {
   if (typeof window !== "undefined") {
     const savedCart = localStorage.getItem("cart");
-    if (savedCart) {
-      return JSON.parse(savedCart);
-    } else {
-      return {
-        id: "xxxx",
-        userId: "xxxxx",
-        cartItems: [],
-        total: 0,
-        quantity: 0,
-      };
-    }
+    savedCart ? JSON.parse(savedCart) : initialCart;
   }
-  return {
-    id: "xxxx",
-    userId: "xxxxx",
-    cartItems: [],
-    total: 0,
-    quantity: 0,
-  };
+  return initialCart;
 };
 
 type Cart = {
@@ -56,7 +48,7 @@ type ContextProps = {
 };
 
 export const CartContext = createContext<ContextProps>({
-  cart: { id: "xxxx", userId: "xxxxx", cartItems: [], total: 0, quantity: 0 },
+  cart: initialCart,
   addProduct: () => {},
   handleQuantity: () => {},
   deleteProduct: () => {},
@@ -64,7 +56,6 @@ export const CartContext = createContext<ContextProps>({
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<Cart>(getSavedCart());
-  const [updateTrigger, setupdateTrigger] = useState<number>(0);
   const { data: session, status } = useSession();
   useEffect(() => {
     if (status === "authenticated") {
@@ -72,14 +63,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         const cartData = await getUserCart();
         // @ts-ignore
         setCart(cartData);
+        localStorage.removeItem("cart");
       };
       fetchData();
-    } else return;
-  }, [status, updateTrigger]);
+    }
+  }, [status]);
 
   useEffect(() => {
-    if (status === "authenticated") {
-    } else {
+    if (status !== "authenticated") {
       localStorage.setItem("cart", JSON.stringify(cart));
     }
   }, [cart, status]);
@@ -92,95 +83,76 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   ) => {
     if (status === "authenticated") {
       addtoCart(product, color, size, quantity);
-      return setupdateTrigger(Math.random() * 100);
-    }
-    const newState = { ...cart };
-    const isExist = newState.cartItems.some((item) => item.id === product.id);
-    if (isExist) {
-      const productIndex = newState.cartItems.findIndex(
-        (item) => item.id === product.id
+    } else {
+      const newState = { ...cart };
+      const existingItem = newState.cartItems.find(
+        (item) =>
+          item.productId === product.id &&
+          item.color === color &&
+          item.size === size
       );
-      if (
-        newState.cartItems[productIndex].color === size &&
-        newState.cartItems[productIndex].size === color
-      ) {
-        newState.cartItems[productIndex].quantity += quantity;
-        newState.quantity += quantity;
-        newState.total += product.price * quantity;
+
+      if (existingItem) {
+        existingItem.quantity += quantity;
       } else {
-        const cartItem = {
+        const newCartItem = {
           product,
-          size: size,
-          color: color,
+          size,
+          color,
           quantity,
           id: uuid(),
           cartId: "xxxx",
           productId: product.id,
         };
-        newState.cartItems.push(cartItem);
-        newState.quantity += quantity;
-        newState.total += product.price * quantity;
+        newState.cartItems.push(newCartItem);
       }
-    } else {
-      const cartItem = {
-        product,
-        size: size,
-        color: color,
-        quantity,
-        id: uuid(),
-        cartId: "xxxx",
-        productId: product.id,
-      };
-      newState.cartItems.push(cartItem);
+
       newState.quantity += quantity;
       newState.total += product.price * quantity;
+      setCart(newState);
     }
-    setCart(newState);
-    setupdateTrigger(Math.random() * 100);
   };
 
   const handleQuantity = (operation: "plus" | "minus", id: string) => {
     if (status === "authenticated") {
-      return handleCartItemQuantity(operation, id);
-    }
+      handleCartItemQuantity(operation, id);
+    } else {
+      const newState = { ...cart };
+      const index = newState.cartItems.findIndex((item) => item.id === id);
 
-    const newState = { ...cart };
-    const index = newState.cartItems.findIndex((item) => item.id === id);
+      if (index !== -1) {
+        if (operation === "plus") {
+          newState.cartItems[index].quantity += 1;
+          newState.quantity += 1;
+          newState.total += newState.cartItems[index].product.price;
+        } else if (
+          operation === "minus" &&
+          newState.cartItems[index].quantity > 1
+        ) {
+          newState.cartItems[index].quantity -= 1;
+          newState.quantity -= 1;
+          newState.total -= newState.cartItems[index].product.price;
+        }
 
-    if (index !== -1) {
-      if (operation === "plus") {
-        newState.cartItems[index].quantity += 1;
-        newState.quantity += 1;
-        newState.total += newState.cartItems[index].product.price;
-      } else if (
-        operation === "minus" &&
-        newState.cartItems[index].quantity > 1
-      ) {
-        newState.cartItems[index].quantity -= 1;
-        newState.quantity -= 1;
-        newState.total -= newState.cartItems[index].product.price;
+        setCart(newState);
       }
-
-      setCart(newState);
-      setupdateTrigger(Math.random() * 100);
     }
   };
 
   const deleteProduct = (id: string) => {
     if (status === "authenticated") {
-      return deleteCartItem(id);
-    }
-
-    const newState = { ...cart };
-    const index = newState.cartItems.findIndex((item) => item.id === id);
-    if (index !== -1) {
-      const selectedProduct = newState.cartItems[index];
-      newState.cartItems.splice(index, 1);
-      newState.quantity -= selectedProduct.quantity;
-      newState.total -=
-        selectedProduct.quantity * selectedProduct.product.price;
-      setCart(newState);
-      setupdateTrigger(Math.random() * 100);
+      deleteCartItem(id);
+    } else {
+      const newState = { ...cart };
+      const index = newState.cartItems.findIndex((item) => item.id === id);
+      if (index !== -1) {
+        const selectedProduct = newState.cartItems[index];
+        newState.cartItems.splice(index, 1);
+        newState.quantity -= selectedProduct.quantity;
+        newState.total -=
+          selectedProduct.quantity * selectedProduct.product.price;
+        setCart(newState);
+      }
     }
   };
 
