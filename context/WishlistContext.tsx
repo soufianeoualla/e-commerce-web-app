@@ -32,7 +32,7 @@ export const WishlistContext = createContext<ContextProps>({
 
 export const WishlistProvider = ({ children }: { children: ReactNode }) => {
   const [wishlist, setWishlist] = useState<WishlistTypes>(getSavedWishlist());
-  const [updateTrigger, setupdateTrigger] = useState<number>(0);
+  const [trigger, setTrigger] = useState<number>(0);
 
   const { data: session, status } = useSession();
   useEffect(() => {
@@ -45,7 +45,7 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
       fetchData();
       localStorage.removeItem("wishlist");
     }
-  }, [status, updateTrigger]);
+  }, [status, trigger]);
 
   useEffect(() => {
     if (status !== "authenticated") {
@@ -64,7 +64,6 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
       );
       if (isExist) {
         newState.products.filter((item) => item.productId !== product.id);
-
       } else {
         const newProduct = {
           product,
@@ -73,10 +72,9 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
           productId: product.id,
         };
         newState.products.push(newProduct);
-
       }
     }
-    setupdateTrigger(Math.random() * 100);
+    setTrigger(Math.random() * 100);
   };
 
   return (

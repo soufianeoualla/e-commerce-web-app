@@ -54,12 +54,12 @@ export const Orders = () => {
               <div className="flex items-center gap-x-4">
                 {order.orderItems.map((item) => (
                   <div key={item.id} className="flex items-center gap-x-1">
-                    <div className="h-14 w-14 rounded-full bg-W100 flex justify-center items-center">
+                    <div className="h-10 w-10 rounded-full bg-W100 flex justify-center items-center">
                       <Image
                         src={item.product.images[0].imageSrc}
                         alt={item.product.title}
-                        width={35}
-                        height={42}
+                        width={34}
+                        height={35}
                       />
                     </div>
                     <span className="font-medium text-xs text-neutral-black">

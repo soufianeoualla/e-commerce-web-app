@@ -1,15 +1,41 @@
 "use client";
 import TotalPrice from "@/components/store/TotalPrice";
 import { Button } from "@/components/ui/button";
-import { CartContext } from "@/context/CartContext";
+import { getUserCart } from "@/db/queries";
+import { CartItem } from "@/lib/interfaces";
+import { Loader } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useContext } from "react";
+import { useEffect, useState } from "react";
+
+type Cart = {
+  id: string;
+  userId: string;
+  cartItems: CartItem[];
+  total: number;
+  quantity: number;
+};
 
 export const Order = () => {
-  const { cart } = useContext(CartContext);
-  const products = cart.cartItems;
-  const subtotal = cart.total;
+  const [userCart, setUserCart] = useState<Cart | null>();
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getUserCart();
+      setUserCart(data);
+    };
+    getData();
+  }, []);
+
+  if (!userCart)
+    return (
+      <div className="w-[372px] text-neutral-500 flex justify-center items-center">
+        <Loader className="animate-spin" />
+      </div>
+    );
+
+  const products = userCart?.cartItems;
+  const subtotal = userCart.total;
 
   return (
     <div className="w-[372px] text-neutral-500">
@@ -20,19 +46,17 @@ export const Order = () => {
         <div className="flex items-center gap-x-3">
           {products?.map((product) => (
             <div key={product.id} className="flex items-center gap-x-2">
-
-            <div
-              
-              className="h-10 w-10 rounded-full bg-W100 flex justify-center items-center"
-            >
-              <Image
-                src={product.product.images[0].imageSrc}
-                alt={product.product.title}
-                width={24}
-                height={35}
-              />
-            </div>
-            <span className="font-medium text-xs text-neutral-black">x {product.quantity} </span>
+              <div className="h-10 w-10 rounded-full bg-W100 flex justify-center items-center">
+                <Image
+                  src={product.product.images[0].imageSrc}
+                  alt={product.product.title}
+                  width={24}
+                  height={35}
+                />
+              </div>
+              <span className="font-medium text-xs text-neutral-black">
+                x {product.quantity}{" "}
+              </span>
             </div>
           ))}
         </div>

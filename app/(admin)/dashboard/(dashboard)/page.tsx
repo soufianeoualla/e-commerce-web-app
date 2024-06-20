@@ -149,7 +149,7 @@ const Page = () => {
                         ))}
                       </td>
 
-                      <td>{"name"}</td>
+                      <td>{order.ref}</td>
                       <td>{formatDate(order.createdAt.toString())}</td>
                       <td>{formatPrice(order.amount)}</td>
                       <td className="">

@@ -50,7 +50,7 @@ const Filters = ({
   };
 
   const handleColor = (index: number) => {
-    if (typeof color === "number") {
+    if (color === index) {
       setColor(undefined);
     } else {
       setColor(index);
@@ -58,7 +58,7 @@ const Filters = ({
   };
 
   const handleSize = (index: number) => {
-    if (typeof size === "number") {
+    if (size === index) {
       setSize(undefined);
     } else {
       setSize(index);

@@ -20,7 +20,7 @@ export const Summary = ({ subtotal }: Props) => {
   };
 
   return (
-    <div className="w-[341px] py-8 px-6 rounded-md border border-slate-200 text-neutral-500">
+    <div className="w-[341px] h-[380px] py-8 px-6 rounded-md border border-slate-200 text-neutral-500">
       <h1 className="text-neutral-black font-bold mb-10 text-[16px]">
         Order Summary
       </h1>

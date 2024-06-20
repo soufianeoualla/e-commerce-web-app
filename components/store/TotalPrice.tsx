@@ -1,6 +1,6 @@
 "use client";
 import { isFirstOrder } from "@/db/queries";
-import { cn, formatPrice } from "@/lib/utils";
+import {  formatPrice } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 
 type Props = {
@@ -16,10 +16,9 @@ const TotalPrice = ({ subtotal }: Props) => {
     };
     getData();
   }, []);
-  const tax = 3;
   const shipping = subtotal >= 100 ? 0 : 20;
   const firstOrder0FF = firstOrder ? subtotal * 0.25 : 0;
-  const total = subtotal * (1 + tax / 100) - firstOrder0FF + shipping;
+  const total = subtotal  - firstOrder0FF + shipping;
 
   return (
     <>
@@ -34,15 +33,6 @@ const TotalPrice = ({ subtotal }: Props) => {
         <span className="text-neutral-black font-medium">
           {subtotal >= 100 ? "FREE" : "$20.00"}
         </span>
-      </div>
-      <div
-        className={cn(
-          "flex justify-between items-center  ",
-          !firstOrder && "mb-6"
-        )}
-      >
-        Tax:
-        <span className="text-neutral-black font-medium">% {tax}</span>
       </div>
       {firstOrder && (
         <div className="flex justify-between items-center mt-3 mb-6">

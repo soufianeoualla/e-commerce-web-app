@@ -1,5 +1,4 @@
 "use client";
-
 import {
   addtoCart,
   deleteCartItem,
@@ -27,7 +26,6 @@ const getSavedCart = () => {
   }
   return initialCart;
 };
-
 
 type Cart = {
   id: string;
@@ -58,6 +56,7 @@ export const CartContext = createContext<ContextProps>({
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<Cart>(getSavedCart());
+  const [trigger, setTrigger] = useState<number>(0);
   const { data: session, status } = useSession();
   useEffect(() => {
     if (status === "authenticated") {
@@ -68,7 +67,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       };
       fetchData();
     }
-  }, [status]);
+  }, [status,trigger]);
 
   useEffect(() => {
     if (status !== "authenticated") {
@@ -113,6 +112,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       setCart(newState);
     }
     toast.success("Item added to your cart");
+    setTrigger(Math.random() * 100);
   };
 
   const handleQuantity = (operation: "plus" | "minus", id: string) => {
@@ -139,6 +139,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         setCart(newState);
       }
     }
+    setTrigger(Math.random() * 100);
   };
 
   const deleteProduct = (id: string) => {
@@ -157,6 +158,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       }
     }
     toast.success("Item deleted from your cart");
+    setTrigger(Math.random() * 100);
   };
 
   return (

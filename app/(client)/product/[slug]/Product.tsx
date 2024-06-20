@@ -74,19 +74,21 @@ export const Product = ({ product, reviews }: Props) => {
           </span>
           <div className="flex items-center gap-x-4">
             {product.colors.map((color, index) => (
-              <button
-                onClick={() => setSelectedColor(index)}
+              <div
                 key={index}
                 className={cn(
-                  "w-6 h-6 rounded-full hover:border hover:border-neutral-black/50 flex justify-center items-center",
+                  "p-1 rounded-full",
                   selectedColor === index && "border border-neutral-black"
                 )}
-                style={{ backgroundColor: color }}
               >
-                {selectedColor === index && (
-                  <Check className="w-5 h-5 text-neutral-black" />
-                )}
-              </button>
+                <button
+                  onClick={() => setSelectedColor(index)}
+                  className={cn(
+                    "w-6 h-6 rounded-full hover:border hover:border-neutral-black/50 flex justify-center items-center"
+                  )}
+                  style={{ backgroundColor: color }}
+                ></button>
+              </div>
             ))}
           </div>
         </div>

@@ -19,7 +19,7 @@ const CartPage = () => {
           <BreadcrumbWithCustomSeparator classname="p-0 bg-transparent" />
         </div>
       </div>
-      <div className="max-w-[1116px] mx-auto flex justify-between gap-[128px]">
+      <div className="max-w-[1116px] mx-auto flex justify-between mb-12 gap-[128px]">
         {cart.cartItems.length > 0 ? (
           <>
             <div className="w-[628px]">
@@ -27,7 +27,7 @@ const CartPage = () => {
                 Your cart
               </h3>
               <hr className="border-slate-200" />
-              <div className=" mt-12">
+              <div className="grid gap-y-4 mt-12">
                 {cartItems?.map((cartItem) => (
                   <CartProductCard
                     key={cartItem.productId}
