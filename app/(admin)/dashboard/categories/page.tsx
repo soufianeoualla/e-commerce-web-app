@@ -4,16 +4,14 @@ import { Loader, SearchIcon, X } from "lucide-react";
 import { AddCategory } from "./AddCategory";
 import { getAllCategories } from "@/db/queries";
 import { Category } from "@prisma/client";
-import { Button } from "@/components/ui/button";
 import { deleteCategory } from "@/actions/dashboard";
-import { useToast } from "@/components/ui/use-toast";
+import toast from "react-hot-toast";
 
 const Page = () => {
   const [categories, setCategories] = useState<Category[] | null | undefined>(
     null
   );
   const [isPending, startTransition] = useTransition();
-  const { toast } = useToast();
   const [query, setQuery] = useState<string>("");
 
   useEffect(() => {
@@ -37,15 +35,9 @@ const Page = () => {
       const data = await deleteCategory(id);
 
       if (data.success) {
-        toast({
-          variant: "default",
-          description: data.success,
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          description: data.error,
-        });
+        toast.success(data.success);
+      } else if (data.error) {
+        toast.error(data.error);
       }
     });
   };
@@ -76,7 +68,7 @@ const Page = () => {
         {filtredCategories.map((category) => (
           <div
             key={category.id}
-            className="flex items-center gap-4 px-3 h-10 border-slate-300 border rounded justify-between"
+            className="flex items-center gap-4 px-3 h-10 border-slate-300 border rounded justify-between capitalize"
           >
             <span>{category.title}</span>
             <button

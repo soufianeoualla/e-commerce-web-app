@@ -33,11 +33,11 @@ export const colors = [
   { id: 2, title: "brown", hexCode: "#6F4E37" },
   { id: 3, title: "grey", hexCode: "#DDDDDD" },
   { id: 4, title: "beige", hexCode: "#FED8B1" },
-  { id: 5, title: "navy blue", hexCode: "#000080" },
+  { id: 5, title: "white", hexCode: "#FFFFFF" },
   { id: 6, title: "red", hexCode: "#FF0000" },
-  { id: 7, title: "green", hexCode: "#008000" },
-  { id: 8, title: "yellow", hexCode: "#FFFF00" },
-  { id: 9, title: "pink", hexCode: "#FFC0CB" },
+  { id: 7, title: "sky blue", hexCode: "#80C4E9" },
+  { id: 8, title: "navy", hexCode: "#102C57" },
+  { id: 9, title: "green", hexCode: "#365E32" },
   { id: 10, title: "purple", hexCode: "#800080" }
 ];
 

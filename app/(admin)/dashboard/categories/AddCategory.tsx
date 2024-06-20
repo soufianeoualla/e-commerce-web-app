@@ -24,7 +24,7 @@ export const AddCategory = () => {
   const handleSubmit = () => {
     if (!category) return setError("Category is required");
     startTransition(async () => {
-      const data = await addNewCatgeory(category);
+      const data = await addNewCatgeory(category.toLowerCase());
       if (data.success) {
         setSuccess(data.success);
       } else {

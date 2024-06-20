@@ -9,8 +9,7 @@ import { CartContext } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { WishlistContext } from "@/context/WishlistContext";
 import { FormError } from "@/components/auth/FormError";
-import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 type Props = {
   product: SingleProduct;
@@ -22,8 +21,6 @@ export const Product = ({ product, reviews }: Props) => {
   const [selectedSize, setSelectedSize] = useState<number | undefined>();
   const [quantity, setQuantity] = useState<number>(1);
   const [error, setError] = useState<string | undefined>("");
-  const { toast } = useToast();
-  const router = useRouter();
 
   const { addProduct } = useContext(CartContext);
   const { wishlist, handleWishlist } = useContext(WishlistContext);
@@ -39,9 +36,6 @@ export const Product = ({ product, reviews }: Props) => {
       sizes[selectedSize].title,
       product!.colors[selectedColor]
     );
-    toast({
-      description: "Item added to your cart",
-    });
   };
   const overallRating =
     reviews.length > 0

@@ -31,7 +31,9 @@ const TotalPrice = ({ subtotal }: Props) => {
       </div>
       <div className="flex justify-between items-center my-3">
         Shipping:
-        <span className="text-neutral-black font-medium">$20.00</span>
+        <span className="text-neutral-black font-medium">
+          {subtotal >= 100 ? "FREE" : "$20.00"}
+        </span>
       </div>
       <div
         className={cn(

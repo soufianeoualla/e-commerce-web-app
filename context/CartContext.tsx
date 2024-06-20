@@ -9,6 +9,7 @@ import { getUserCart } from "@/db/queries";
 import { CartItem, SingleProduct } from "@/lib/interfaces";
 import { useSession } from "next-auth/react";
 import { ReactNode, createContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { v4 as uuid } from "uuid";
 
 const initialCart = {
@@ -22,10 +23,11 @@ const initialCart = {
 const getSavedCart = () => {
   if (typeof window !== "undefined") {
     const savedCart = localStorage.getItem("cart");
-    savedCart ? JSON.parse(savedCart) : initialCart;
+    return savedCart ? JSON.parse(savedCart) : initialCart;
   }
   return initialCart;
 };
+
 
 type Cart = {
   id: string;
@@ -63,7 +65,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         const cartData = await getUserCart();
         // @ts-ignore
         setCart(cartData);
-        localStorage.removeItem("cart");
       };
       fetchData();
     }
@@ -111,6 +112,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       newState.total += product.price * quantity;
       setCart(newState);
     }
+    toast.success("Item added to your cart");
   };
 
   const handleQuantity = (operation: "plus" | "minus", id: string) => {
@@ -154,6 +156,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         setCart(newState);
       }
     }
+    toast.success("Item deleted from your cart");
   };
 
   return (

@@ -64,6 +64,7 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
       );
       if (isExist) {
         newState.products.filter((item) => item.productId !== product.id);
+
       } else {
         const newProduct = {
           product,
@@ -72,6 +73,7 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
           productId: product.id,
         };
         newState.products.push(newProduct);
+
       }
     }
     setupdateTrigger(Math.random() * 100);

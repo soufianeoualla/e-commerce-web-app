@@ -26,7 +26,7 @@ import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { SingleProduct } from "@/lib/interfaces";
 import { addProduct, editProduct } from "@/actions/products";
-import { useToast } from "@/components/ui/use-toast";
+import toast from "react-hot-toast";
 
 export const AddProduct = () => {
   const [product, setProduct] = useState<SingleProduct | null>();
@@ -35,7 +35,6 @@ export const AddProduct = () => {
   const [isFeatured, setIsFeatured] = useState<boolean>(false);
   const searchParms = useSearchParams();
   const slug = searchParms.get("slug");
-  const { toast } = useToast();
   const form = useForm<z.infer<typeof addProductSchema>>({
     resolver: zodResolver(addProductSchema),
     defaultValues: {
@@ -90,21 +89,16 @@ export const AddProduct = () => {
         data = await addProduct(values, isFeatured);
       }
       if (data.success) {
-        toast({
-          variant: "default",
-          description: data.success,
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          description: data.error,
-        });
+        toast.success(data.success);
+      }
+      if (data.error) {
+        toast.success(data.error);
       }
       form.reset();
     });
   };
 
-  if (!categories || !product)
+  if (!categories)
     return (
       <div className="flex justify-center items-center h-screen">
         <Loader className="animate-spin" />
@@ -358,4 +352,3 @@ export const AddProduct = () => {
     </>
   );
 };
-

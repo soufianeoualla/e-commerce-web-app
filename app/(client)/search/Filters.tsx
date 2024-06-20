@@ -69,7 +69,7 @@ const Filters = ({
     <div className="border rounded-md sticky self-start top-0 p-4 pb-8">
       <div className="">
         <h3 className="text-neutral-black font-medium">Categories</h3>
-        <div className="mt-8">
+        <div className="mt-8 capitalize">
           {categoriesData?.map((item, index) => (
             <>
               <div

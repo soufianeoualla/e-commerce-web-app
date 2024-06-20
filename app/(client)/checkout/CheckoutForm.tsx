@@ -15,13 +15,11 @@ import { Input } from "@/components/ui/input";
 import { ShippingAddressSchema } from "@/schemas";
 import { Order } from "./Order";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { createCheckoutSession } from "@/actions/checkout";
-import { useToast } from "@/components/ui/use-toast";
-import { ShippingAddress } from "@prisma/client";
 import { getUserShippingAddress } from "@/db/queries";
+import toast from "react-hot-toast";
 export const CheckoutForm = () => {
-  const { toast } = useToast();
   const form = useForm<z.infer<typeof ShippingAddressSchema>>({
     resolver: zodResolver(ShippingAddressSchema),
     defaultValues: {
@@ -61,11 +59,9 @@ export const CheckoutForm = () => {
       const data = await createCheckoutSession(values);
       if (data.url) {
         router.push(data.url);
-      } else {
-        toast({
-          variant: "destructive",
-          description: data.error,
-        });
+      }
+      if (data.error) {
+        toast.error(data.error);
       }
     });
   };

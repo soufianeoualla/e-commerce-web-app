@@ -1,29 +1,15 @@
 import { db } from "@/db/db";
 const { faker } = require("@faker-js/faker");
 
-const categories = [
-  "New Arrivals",
-  "Hoodies",
-  "Sweetshirts",
-  "Athletic Wear",
-  "t-shirts",
-  "men",
-  "women",
-];
-
 const main = async () => {
   await db.orderGoal.create({
     data: {
       goal: 500,
     },
   });
-  await db.category.createMany({
-    data: categories.map((item) => ({
-      title: item,
-    })),
-  });
+
   const users = await Promise.all(
-    Array.from({ length: 10 }).map(() =>
+    Array.from({ length: 20 }).map(() =>
       db.user.create({
         data: {
           name: faker.person.fullName(),
@@ -36,34 +22,15 @@ const main = async () => {
     )
   );
 
-  // Generate Products
-  const products = await Promise.all(
-    Array.from({ length: 20 }).map(() =>
-      db.product.create({
-        data: {
-          images: {
-            create: Array.from({ length: 3 }).map(() => ({
-              imageSrc: faker.image.url(),
-            })),
-          },
-          title: faker.commerce.productName(),
-          slug: faker.lorem.slug(),
-          price: parseFloat(faker.commerce.price()),
-          quantity: faker.number.int({ min: 1, max: 100 }),
-          description: faker.commerce.productDescription(),
-          sku: faker.datatype.number({ min: 1, max: 2147483647 }), // Ensure SKU is within 32-bit integer range
-          colors: [faker.color.hsl({ format: "css" })],
-          sizes: ["S", "M", "L", "XL"],
-          categories: [faker.string.alpha()],
-          isFeatured: faker.datatype.boolean(),
-        },
-      })
-    )
-  );
+  const products = [
+    { id: "0f4a6640-7ba6-4cc0-9d16-af991ab91fdf" },
+    { id: "51d004d5-52ff-43bb-a944-a667077babb3" }, 
+    { id: "7a1690eb-34b9-40c8-9305-8e8425eb6db6" },
+    { id: "1f149a02-0ae7-4dee-bf62-a4ead6f2d964" },
+  ];
 
-  // Generate Orders
   const orders = await Promise.all(
-    Array.from({ length: 10 }).map(async () => {
+    Array.from({ length: 20 }).map(async () => {
       const userId =
         users[faker.datatype.number({ min: 0, max: users.length - 1 })].id;
 

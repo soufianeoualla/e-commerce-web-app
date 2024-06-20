@@ -18,7 +18,7 @@ export const Hero = () => {
         <div className="relative translate-y-[89px] ">
           <div className="w-[340px] h-[340px] rounded-full bg-W200" />
           <Image
-            src={"/hero.svg"}
+            src={"/Hero.svg"}
             alt="man"
             height={382}
             width={255}

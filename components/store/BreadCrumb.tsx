@@ -5,7 +5,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { cn } from "@/lib/utils";
@@ -16,7 +15,7 @@ type Props = {
 };
 export function BreadcrumbWithCustomSeparator({ classname }: Props) {
   const pathname = usePathname();
-  const routes = pathname.split("/"); // remove any empty strings
+  const routes = pathname.split("/"); 
 
   return (
     <Breadcrumb className={cn("py-6 bg-W100", classname)}>

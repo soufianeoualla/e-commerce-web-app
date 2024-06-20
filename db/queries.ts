@@ -80,6 +80,7 @@ export const getFeaturedProducts = async () => {
 export const getUserCart = async () => {
   const session = await auth();
   const user = session?.user;
+  if(!user) return null
 
   try {
     const cureentUser = await db.user.findUnique({
@@ -153,9 +154,10 @@ export const getUserShippingAddress = async () => {
 export const getUserOrders = async () => {
   const session = await auth();
   const user = session?.user;
+  if (!user) return null;
   try {
     return await db.order.findMany({
-      where: { userId: user?.id },
+      where: { userId: user.id },
       include: {
         orderItems: {
           include: {

@@ -1,27 +1,73 @@
 "use client";
 import { addtoCart } from "@/actions/cart";
-import { CartContext } from "@/context/CartContext";
+import { CartItem } from "@/lib/interfaces";
 import { Loader } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useContext, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useState } from "react";
+
+const initialCart = {
+  id: "xxxx",
+  userId: "xxxxx",
+  cartItems: [],
+  total: 0,
+  quantity: 0,
+};
+type Cart = {
+  id: string;
+  userId: string;
+  cartItems: CartItem[];
+  total: number;
+  quantity: number;
+};
+
+const getSavedCart = () => {
+  if (typeof window !== "undefined") {
+    const savedCart = localStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : initialCart;
+  }
+  return initialCart;
+};
 
 const Page = () => {
-  const { cart } = useContext(CartContext);
   const router = useRouter();
+  const { status } = useSession();
+  const [cart, setcart] = useState<Cart>(getSavedCart());
+  const memoizedCart = useMemo(() => cart, [cart]);
+
+  const pathname = usePathname();
+
+  const handleCart = useCallback(async () => {
+    if (status === "authenticated") {
+      if (memoizedCart.cartItems.length === 0) {
+        router.push("/");
+        return;
+      }
+      for (const product of memoizedCart.cartItems) {
+        try {
+          await addtoCart(
+            product.product,
+            product.color,
+            product.size,
+            product.quantity
+          );
+        } catch (error) {
+          console.error("Error adding product to cart:", error);
+        }
+      }
+      localStorage.removeItem("cart");
+      router.push("/checkout");
+    }
+  }, [status, memoizedCart, router]);
 
   useEffect(() => {
-    if (!cart.cartItems || cart.cartItems.length === 0) {
-      return router.push("/");
+    if (!pathname.includes("/call-back")) {
+      router.replace("/auth/call-back");
+      return;
     }
-
-    cart.cartItems.forEach(async (product) => {
-      //@ts-ignore
-      await addtoCart(product, product.color, product.size, product.quantity);
-    });
-    localStorage.removeItem("cart");
-
-    return router.push("/checkout");
-  }, [cart, router]);
+    router.refresh();
+    handleCart();
+  }, [status, handleCart, pathname, router]);
   return (
     <div className="w-full mt-24 flex justify-center h-screen">
       <div className="flex items-center flex-col gap-2">

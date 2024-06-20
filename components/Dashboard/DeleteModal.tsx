@@ -7,7 +7,7 @@ import {
 } from "@/actions/dashboard";
 import { Button } from "@/components/ui/button";
 import { useTransition, type Dispatch, type SetStateAction } from "react";
-import { useToast } from "../ui/use-toast";
+import toast from "react-hot-toast";
 
 type Props = {
   setDeleteModal: Dispatch<SetStateAction<boolean>>;
@@ -17,7 +17,6 @@ type Props = {
 
 export const DeleteModal = ({ setDeleteModal, id, type }: Props) => {
   const [isPending, startTransition] = useTransition();
-  const { toast } = useToast();
   const onDelete = () => {
     setDeleteModal(false);
     startTransition(async () => {
@@ -41,15 +40,9 @@ export const DeleteModal = ({ setDeleteModal, id, type }: Props) => {
       }
 
       if (data.success) {
-        toast({
-          variant: "default",
-          description: data.success,
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          description: data.error,
-        });
+        toast.success(data.success);
+      } else if (data.error) {
+        toast.error(data.error);
       }
     });
   };

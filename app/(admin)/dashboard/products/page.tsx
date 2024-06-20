@@ -1,10 +1,5 @@
 "use client";
-import {
-  Loader,
-  SearchIcon,
-  SquarePen,
-  Trash2,
-} from "lucide-react";
+import { Loader, SearchIcon, SquarePen, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { getAllProducts } from "@/db/queries";
 import Image from "next/image";
@@ -42,7 +37,7 @@ const Page = () => {
         <Loader className="animate-spin" />
       </div>
     );
-
+  console.log(products);
   const filtredProducts = query
     ? products.filter((item) => item.title.toLowerCase() === query)
     : products;

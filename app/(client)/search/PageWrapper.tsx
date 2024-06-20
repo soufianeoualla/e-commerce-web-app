@@ -97,7 +97,7 @@ export const PageWrapper = ({
           categories.map((item, index) => (
             <div
               key={index}
-              className="flex items-center gap-x-2 h-9 justify-center px-4 rounded-2xl border border-slate-200 mt-3 text-neutral-black text-xs font-medium"
+              className="flex items-center gap-x-2 h-9 justify-center px-4 rounded-2xl border border-slate-200 mt-3 text-neutral-black text-xs font-medium capitalize"
             >
               {item}
               <button onClick={() => deleteCategoryFilter(index)}>

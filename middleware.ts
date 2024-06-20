@@ -5,19 +5,19 @@ import {
   adminRoute,
   apiRoutes,
   authRoutes,
-  profileRoute,
+  protectedRoutes,
   publicRoutes,
 } from "./routes";
 export const { auth } = NextAuth(authConfig);
 export default auth(async (req, res) => {
-  const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
+  const { pathname, origin } = req.nextUrl;
   const isAdmin = req.auth?.user?.role === "admin";
-  const isApiRoute = nextUrl.pathname.startsWith(apiRoutes);
-  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
-  const isAdminRoute = nextUrl.pathname.startsWith(adminRoute);
-  const isProfileRoute = nextUrl.pathname.startsWith(profileRoute);
+  const isApiRoute = pathname.startsWith(apiRoutes);
+  const isAuthRoute = authRoutes.includes(pathname);
+  const isPublicRoute = publicRoutes.includes(pathname);
+  const isAdminRoute = pathname.startsWith(adminRoute);
+  const isProtectedRoute = protectedRoutes.includes(pathname);
 
   if (isApiRoute) {
     return;
@@ -30,14 +30,14 @@ export default auth(async (req, res) => {
   }
 
   if (isAuthRoute && isLoggedIn) {
-    return Response.redirect(new URL(DEFAULT_REDIRECT_LINK, nextUrl));
+    return Response.redirect(new URL(DEFAULT_REDIRECT_LINK, origin));
   }
 
-  // if (isProfileRoute && !isLoggedIn) {
-  //   return Response.redirect(new URL("/auth/login", nextUrl));
-  // }
+  if (isProtectedRoute && !isLoggedIn) {
+    return Response.redirect(new URL("/auth/login", origin));
+  }
   // if (isAdminRoute && !isAdmin) {
-  //   return Response.redirect(new URL("/", nextUrl));
+  //   return Response.redirect(new URL("/", origin));
   // }
 
   return;
