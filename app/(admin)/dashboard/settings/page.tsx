@@ -4,16 +4,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect, useState, useTransition } from "react";
 import { addUser, setOrderGoal } from "@/actions/dashboard";
-import { useToast } from "@/components/ui/use-toast";
 import { OrderGoal } from "@prisma/client";
 import { getOrdersGaol } from "@/db/queries";
+import toast from "react-hot-toast";
 
 const Page = () => {
   const [isPending, startTransition] = useTransition();
   const [goal, setGoal] = useState<number | null>();
   const [currentGoal, setCurrentGoal] = useState<OrderGoal | null>();
   const [email, setEmail] = useState<string>("");
-  const { toast } = useToast();
   useEffect(() => {
     const getData = async () => {
       const data = await getOrdersGaol();
@@ -23,45 +22,26 @@ const Page = () => {
   }, []);
 
   const onAddUser = () => {
-    if (email)
-      return toast({
-        variant: "destructive",
-        description: "Email is required",
-      });
+    if (email) return toast.error("Email is required");
     startTransition(async () => {
       const data = await addUser(email);
       if (data.success) {
-        toast({
-          variant: "default",
-          description: data.success,
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          description: data.error,
-        });
+        toast.success(data.success);
+      } else if (data.error) {
+        toast.error(data.error);
       }
     });
   };
   const onSave = () => {
-    if (!goal)
-      return toast({
-        variant: "destructive",
-        description: "Goal is required",
-      });
+    if (!goal) return toast.error("Goal is required");
+
     const id = currentGoal?.id || 123;
     startTransition(async () => {
       const data = await setOrderGoal(id, goal);
       if (data.success) {
-        toast({
-          variant: "default",
-          description: data.success,
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          description: data.error,
-        });
+        toast.success(data.success);
+      } else if (data.error) {
+        toast.error(data.error);
       }
     });
   };

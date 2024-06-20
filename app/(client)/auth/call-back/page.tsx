@@ -2,8 +2,8 @@
 import { addtoCart } from "@/actions/cart";
 import { CartItem } from "@/lib/interfaces";
 import { Loader } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { usePathname, useRouter } from "next/navigation";
+import { getSession} from "next-auth/react";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 const initialCart = {
@@ -31,14 +31,14 @@ const getSavedCart = () => {
 
 const Page = () => {
   const router = useRouter();
-  const { status } = useSession();
   const [cart, setcart] = useState<Cart>(getSavedCart());
   const memoizedCart = useMemo(() => cart, [cart]);
 
   const pathname = usePathname();
 
   const handleCart = useCallback(async () => {
-    if (status === "authenticated") {
+    const session = await getSession();
+    if (session?.user) {
       if (memoizedCart.cartItems.length === 0) {
         router.push("/");
         return;
@@ -58,16 +58,15 @@ const Page = () => {
       localStorage.removeItem("cart");
       router.push("/checkout");
     }
-  }, [status, memoizedCart, router]);
+  }, [memoizedCart, router]);
 
   useEffect(() => {
     if (!pathname.includes("/call-back")) {
-      router.replace("/auth/call-back");
-      return;
+      redirect("/auth/call-back");
     }
-    router.refresh();
+
     handleCart();
-  }, [status, handleCart, pathname, router]);
+  }, [handleCart, pathname]);
   return (
     <div className="w-full mt-24 flex justify-center h-screen">
       <div className="flex items-center flex-col gap-2">
