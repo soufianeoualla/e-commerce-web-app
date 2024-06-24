@@ -13,7 +13,7 @@ export const Footer = () => {
   const today = new Date();
   return (
     <>
-      <footer className="max-w-[1116px] mx-auto mb-[102px] flex justify-between ">
+      <footer className="max-w-[1116px] mx-auto mb-[102px] flex justify-between flex-wrap gap-y-8 sm:px-4 ">
         <div className="">
           <div className="flex items-center gap-x-4 mb-3">
             <div className="w-11 h-11 border border-slate-200 rounded-md flex justify-center items-center">
@@ -44,7 +44,7 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="flex items-start gap-[72px]">
+        <div className="flex items-start gap-[72px] sm:gap-12">
           <div className="space-y-10">
             <h3 className="text-neutral-400 font-medium">SUPPORT</h3>
             <ul className="space-y-4 text-neutral-500">

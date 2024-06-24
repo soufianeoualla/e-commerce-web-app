@@ -30,7 +30,7 @@ export const Products = ({ selectedCategory }: Props) => {
   if (!products)
     return (
       <div className="max-w-[1116px] mx-auto mb-12">
-        <div className="flex justify-between">
+        <div className="flex justify-between flex-wrap">
           <ProductSkeleton />
           <ProductSkeleton />
           <ProductSkeleton />

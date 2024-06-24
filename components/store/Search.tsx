@@ -10,7 +10,7 @@ export const Search = () => {
     router.push(`/search?query=${query}`);
   };
   return (
-    <div className="search relative text-neutral-500">
+    <div className="search relative text-neutral-500 sm:hidden">
       <input
         onKeyDown={(e) => {
           if (e.key === "Enter") {

@@ -6,7 +6,7 @@ export const ProductCategory = () => {
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
 
   return (
-    <div className="max-w-[1116px] mx-auto mb-48">
+    <div className="max-w-[1116px] mx-auto mb-48 sm:px-4">
       <Categories
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}

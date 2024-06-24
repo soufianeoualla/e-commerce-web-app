@@ -4,8 +4,8 @@ import Image from "next/image";
 export const Banner = () => {
   return (
     <div className="bg-W100 mt-40  mb-36 pb-6">
-      <div className="max-w-[1116px] mx-auto flex justify-between items-center">
-        <div className="space-y-8">
+      <div className="max-w-[1116px] mx-auto flex justify-between items-center sm:flex-col-reverse">
+        <div className="space-y-8 sm:px-4">
           <div className="space-y-6">
             <h1 className="text-neutral-black font-bold text-2xl">Browse Our Fashion Paradise!</h1>
             <p className="leading-6 text-neutral-500">

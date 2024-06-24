@@ -50,13 +50,13 @@ export const BestSelling = () => {
     (a, b) => b.totalSales - a.totalSales
   );
   return (
-    <section className="mt-[100px]">
+    <section className="mt-[100px] sm:px-4">
       <h1 className="text-2xl font-bold text-neutral-black text-left mb-8">
         Best Selling
       </h1>
       <ProductsList
         products={bestSellingProducts}
-        classname="grid grid-cols-4"
+       
       />
     </section>
   );

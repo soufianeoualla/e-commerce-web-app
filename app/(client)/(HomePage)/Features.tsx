@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export const Features = () => {
   return (
-    <div className="mt-[88px]  flex justify-between items-start mb-12">
+    <div className="mt-[88px]  flex justify-between items-start mb-12 flex-wrap sm:items-center sm:px-4 gap-y-4 ">
       <div className="space-y-6">
         <div className="w-12 h-12 rounded-full flex justify-center items-center bg-W100">
           <Image
