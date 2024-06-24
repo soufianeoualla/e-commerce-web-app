@@ -29,7 +29,7 @@ const ProfilePage = () => {
       </div>
       <div className="max-w-[1116px] mt-16 mx-auto mb-[135px] flex  items-start gap-9">
         <Menu selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} />
-        <div className="w-[617px] pl-12 border-l-2 border-l-slate-200 h-[60vh]">
+        <div className="w-full pl-12 border-l-2 border-l-slate-200 h-[60vh]">
           {menuComponents[selectedMenu].component}
         </div>
       </div>

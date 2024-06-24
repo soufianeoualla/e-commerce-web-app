@@ -1,7 +1,6 @@
 export const authRoutes = ["/auth/login", "/auth/register", "/auth/error"];
 export const apiRoutes = "/api";
-export const adminRoute = "/dashboard";
-export const protectedRoutes = ["/profile", "/checkout"];
+export const protectedRoutes = ["/profile", "/checkout", "/call-back"];
 export const publicRoutes = [
   "/",
   "/cart",
@@ -10,4 +9,4 @@ export const publicRoutes = [
   "/auth/reset",
 ];
 
-export const DEFAULT_REDIRECT_LINK = "/auth/call-back";
+export const DEFAULT_REDIRECT_LINK = "/callback";

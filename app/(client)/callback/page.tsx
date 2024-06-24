@@ -1,10 +1,9 @@
 "use client";
 import { addtoCart } from "@/actions/cart";
-import { CartItem } from "@/lib/interfaces";
 import { Loader } from "lucide-react";
-import { getSession} from "next-auth/react";
-import { redirect, usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { getSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect } from "react";
 
 const initialCart = {
   id: "xxxx",
@@ -12,13 +11,6 @@ const initialCart = {
   cartItems: [],
   total: 0,
   quantity: 0,
-};
-type Cart = {
-  id: string;
-  userId: string;
-  cartItems: CartItem[];
-  total: number;
-  quantity: number;
 };
 
 const getSavedCart = () => {
@@ -31,19 +23,16 @@ const getSavedCart = () => {
 
 const Page = () => {
   const router = useRouter();
-  const [cart, setcart] = useState<Cart>(getSavedCart());
-  const memoizedCart = useMemo(() => cart, [cart]);
-
-  const pathname = usePathname();
+  const cart = getSavedCart();
 
   const handleCart = useCallback(async () => {
     const session = await getSession();
     if (session?.user) {
-      if (memoizedCart.cartItems.length === 0) {
+      if (cart.cartItems.length === 0) {
         router.push("/");
         return;
       }
-      for (const product of memoizedCart.cartItems) {
+      for (const product of cart.cartItems) {
         try {
           await addtoCart(
             product.product,
@@ -58,15 +47,11 @@ const Page = () => {
       localStorage.removeItem("cart");
       router.push("/checkout");
     }
-  }, [memoizedCart, router]);
+  }, [cart.cartItems, router]);
 
   useEffect(() => {
-    if (!pathname.includes("/call-back")) {
-      redirect("/auth/call-back");
-    }
-
     handleCart();
-  }, [handleCart, pathname]);
+  }, [handleCart]);
   return (
     <div className="w-full mt-24 flex justify-center h-screen">
       <div className="flex items-center flex-col gap-2">
