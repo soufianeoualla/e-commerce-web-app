@@ -1,6 +1,6 @@
 "use client";
 import { Review, SingleProduct } from "@/lib/interfaces";
-import { Check, Heart, Minus, Plus, Share2 } from "lucide-react";
+import { Heart, Minus, Plus, Share2 } from "lucide-react";
 import React, { useContext, useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import { ImageSlider } from "./ImageSlider";
@@ -8,8 +8,6 @@ import { cn, sizes } from "@/lib/utils";
 import { CartContext } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { WishlistContext } from "@/context/WishlistContext";
-import { FormError } from "@/components/auth/FormError";
-import toast from "react-hot-toast";
 
 type Props = {
   product: SingleProduct;
@@ -18,9 +16,8 @@ type Props = {
 
 export const Product = ({ product, reviews }: Props) => {
   const [selectedColor, setSelectedColor] = useState<number>(0);
-  const [selectedSize, setSelectedSize] = useState<number >(0);
+  const [selectedSize, setSelectedSize] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(1);
-  const [error, setError] = useState<string | undefined>("");
 
   const { addProduct } = useContext(CartContext);
   const { wishlist, handleWishlist } = useContext(WishlistContext);
@@ -29,7 +26,6 @@ export const Product = ({ product, reviews }: Props) => {
   );
 
   const handleAddToCart = () => {
-    if (!selectedSize) return setError("All fields are required");
     addProduct(
       product!,
       quantity,
@@ -141,7 +137,6 @@ export const Product = ({ product, reviews }: Props) => {
             </button>
           </div>
         </div>
-        {error && <FormError message={error} classname="w-[284px]" />}
         <div className=" flex  items-center gap-x-4 mb-3 ">
           <button
             onClick={handleAddToCart}
