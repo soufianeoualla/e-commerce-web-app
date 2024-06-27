@@ -7,7 +7,7 @@ import { ImageSlider } from "./ImageSlider";
 import { cn, sizes } from "@/lib/utils";
 import { CartContext } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
-import { AddToCartButton } from "./addToCartButton";
+import { AddToCartButton } from "./AddToCartButton";
 
 type Props = {
   product: SingleProduct;
