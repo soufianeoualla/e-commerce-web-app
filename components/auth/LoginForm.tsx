@@ -89,10 +89,7 @@ export const LoginForm = () => {
         </Link>
         {success && <FormSucces message={success} />}
         {error && <FormError message={error} />}
-        <Button
-          disabled={isPending}
-          className="bg-neutral-black text-white font-medium h-11 rounded w-full mt-6 hover:bg-opacity-80"
-        >
+        <Button disabled={isPending} className="  h-11  w-full mt-6">
           Login
         </Button>
       </form>

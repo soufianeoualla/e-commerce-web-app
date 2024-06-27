@@ -1,32 +1,14 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import { ProductsList } from "./ProductsList";
 import { SingleProduct } from "@/lib/interfaces";
-import { getAllProducts, getFeaturedProducts } from "@/db/queries";
+
 import { ProductSkeleton } from "@/components/store/ProductSkeleton";
 
 type Props = {
-  selectedCategory: number;
+  products: SingleProduct[];
 };
 
-export const Products = ({ selectedCategory }: Props) => {
-  const [products, setProducts] = useState<SingleProduct[] | null>();
-  useEffect(() => {
-    const getData = async () => {
-      const products =
-        selectedCategory === 0
-          ? await getFeaturedProducts()
-          : await getAllProducts();
-
-      if (products) {
-        setProducts(
-          products.sort((a, b) => b.addedAt.getTime() - a.addedAt.getTime())
-        );
-      }
-    };
-    getData();
-  }, [selectedCategory]);
-
+export const Products = ({ products }: Props) => {
   if (!products)
     return (
       <div className="max-w-[1116px] mx-auto mb-12">

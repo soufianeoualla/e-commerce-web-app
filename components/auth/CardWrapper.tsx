@@ -4,6 +4,9 @@ import { LoginForm } from "./LoginForm";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { RegisterForm } from "./RegisterForm";
+import { Button } from "../ui/button";
+import { DEFAULT_REDIRECT_LINK } from "@/routes";
+import { signIn } from "next-auth/react";
 
 type Props = {
   buttonLabel: string;
@@ -14,14 +17,23 @@ type Props = {
 export const CardWrapper = ({ buttonHref, buttonLabel, social }: Props) => {
   const pathname = usePathname();
   const Component = pathname.includes("login") ? LoginForm : RegisterForm;
+  const onClick = () => {
+    signIn("google", {
+      callbackUrl: DEFAULT_REDIRECT_LINK,
+    });
+  };
   return (
-    <div className="w-[370px] p-8">
+    <div className="w-[370px] sm:w-full p-8">
       {social && (
         <>
-          <button className="flex justify-center items-center gap-x-2 h-11 w-full border border-slate-200 rounded text-neutral-500 font-medium hover:bg-W100">
+          <Button
+            onClick={onClick}
+            variant={"outline"}
+            className="flex justify-center items-center gap-x-2 h-11 w-full border border-slate-200  text-neutral-500 "
+          >
             <Image src={"/Google.svg"} alt="google" width={18} height={18} />
             Continue with Google
-          </button>
+          </Button>
           <div className=" flex items-center gap-x-4 text-xs font-medium text-neutral-500 my-8">
             <div className="w-full h-[2px] rounded-xl bg-slate-200" />
             OR

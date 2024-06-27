@@ -13,7 +13,7 @@ const page = () => {
     <main>
       <div className="h-40 bg-W100   ">
         <div className="max-w-[1116px] mx-auto space-y-2 pt-12  ">
-          <h1 className="text-neutral-black text-2xl font-bold">
+          <h1 className="text-neutral-black text-2xl font-bold sm:px-4">
             Forgot Password
           </h1>
           <BreadcrumbWithCustomSeparator classname="p-0 bg-transparent" />

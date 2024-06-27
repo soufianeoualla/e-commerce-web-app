@@ -6,6 +6,7 @@ import {
   deleteReview,
 } from "@/actions/dashboard";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import { useTransition, type Dispatch, type SetStateAction } from "react";
 import toast from "react-hot-toast";
 
@@ -17,6 +18,7 @@ type Props = {
 
 export const DeleteModal = ({ setDeleteModal, id, type }: Props) => {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const onDelete = () => {
     setDeleteModal(false);
     startTransition(async () => {
@@ -44,6 +46,7 @@ export const DeleteModal = ({ setDeleteModal, id, type }: Props) => {
       } else if (data.error) {
         toast.error(data.error);
       }
+      router.refresh();
     });
   };
 

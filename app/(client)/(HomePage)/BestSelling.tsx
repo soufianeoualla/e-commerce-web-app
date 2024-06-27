@@ -1,7 +1,5 @@
 "use client";
-import { getBestSellingProducts } from "@/db/queries";
 import { OrderItem } from "@/lib/interfaces";
-import { useEffect, useState } from "react";
 import { ProductsList } from "./ProductsList";
 import { Image } from "@prisma/client";
 
@@ -21,18 +19,11 @@ export interface BestSellingProduct {
   isFeatured: boolean;
   totalSales: number;
 }
+type Props = {
+  orderItems: OrderItem[] | null;
+};
 
-export const BestSelling = () => {
-  const [orderItems, setOrderItems] = useState<OrderItem[] | null>();
-
-  useEffect(() => {
-    const getData = async () => {
-      const orderItemsData = await getBestSellingProducts();
-      setOrderItems(orderItemsData);
-    };
-    getData();
-  }, []);
-
+export const BestSelling = ({ orderItems }: Props) => {
   const bestSelling: BestSellingProduct[] = [];
   orderItems?.slice(0, 4).forEach((item) => {
     if (bestSelling.some((c) => c.id === item.productId)) {
@@ -54,10 +45,7 @@ export const BestSelling = () => {
       <h1 className="text-2xl font-bold text-neutral-black text-left mb-8">
         Best Selling
       </h1>
-      <ProductsList
-        products={bestSellingProducts}
-       
-      />
+      <ProductsList products={bestSellingProducts} />
     </section>
   );
 };

@@ -178,3 +178,12 @@ model VerificationToken {
 
   @@unique([email, token])
 }
+
+model ResetToken {
+  id         String   @id @default(cuid())
+  token      String   @unique
+  email      String
+  expires_at DateTime
+
+  @@unique([email, token])
+}

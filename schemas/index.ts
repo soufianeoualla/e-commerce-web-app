@@ -44,6 +44,23 @@ export const changePasswordSchema = z
     }
   );
 
+export const ResetPasswordSchema = z
+  .object({
+    password: z.string().min(6, {
+      message: "New Password must be at least 6 characters.",
+    }),
+    confirmPassword: z.string(),
+  })
+  .refine(
+    (values) => {
+      return values.password === values.confirmPassword;
+    },
+    {
+      message: "Not matched !",
+      path: ["confirmPassword"],
+    }
+  );
+
 export const loginSchema = z.object({
   email: z.string().email({
     message: "Email is required",
@@ -52,9 +69,6 @@ export const loginSchema = z.object({
     message: "Password must be at least 6 characters.",
   }),
 });
-
-
-
 
 export const registerSchema = z.object({
   email: z.string().email({

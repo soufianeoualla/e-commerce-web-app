@@ -23,7 +23,7 @@ import { SelectedColors } from "@/components/Dashboard/SelectedColors";
 import { SelectedSizes } from "@/components/Dashboard/SelectedSizes";
 import { SelectedCategories } from "@/components/Dashboard/SelectedCategories";
 import { cn } from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { SingleProduct } from "@/lib/interfaces";
 import { addProduct, editProduct } from "@/actions/products";
 import toast from "react-hot-toast";
@@ -35,6 +35,7 @@ export const AddProduct = () => {
   const [isFeatured, setIsFeatured] = useState<boolean>(false);
   const searchParms = useSearchParams();
   const slug = searchParms.get("slug");
+  const router = useRouter();
   const form = useForm<z.infer<typeof addProductSchema>>({
     resolver: zodResolver(addProductSchema),
     defaultValues: {
@@ -90,6 +91,7 @@ export const AddProduct = () => {
       }
       if (data.success) {
         toast.success(data.success);
+        router.back();
       }
       if (data.error) {
         toast.success(data.error);

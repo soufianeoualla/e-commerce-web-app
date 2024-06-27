@@ -6,7 +6,8 @@ export const publicRoutes = [
   "/cart",
   "/search",
   "/auth/verification",
-  "/auth/reset",
+  "/auth/forgot-password",
+  "/auth/reset-password"
 ];
 
 export const DEFAULT_REDIRECT_LINK = "/callback";
