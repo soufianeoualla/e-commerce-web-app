@@ -58,7 +58,7 @@ export const Reviews = ({ productId, reviews }: Props) => {
 
   if (!reviews)
     return (
-      <section className="orders w-[727px] mx-auto">
+      <section className=" w-[727px] mx-auto">
         <div className="flex justify-center items-center   text-neutral-500">
           <Loader className="animate-spin" />
         </div>
@@ -86,7 +86,7 @@ export const Reviews = ({ productId, reviews }: Props) => {
   const isDisabled = alreadyHaveReview || !userOrder;
 
   return (
-    <div className="w-[727px]">
+    <div className="w-[727px] sm:w-full">
       <div className="mb-10">
         <h3 className="text-neutral-black font-semibold mb-2  text-[16px]">
           Reviews
@@ -183,7 +183,7 @@ export const Reviews = ({ productId, reviews }: Props) => {
                 className="flex items-start justify-between mt-6"
               >
                 <div className="flex items-start gap-x-4 text-neutral-500">
-                  <div className="w-12 h-12 rounded-full bg-slate-200/50 text-blue-600  flex justify-center items-center uppercase font-medium text-xl">
+                  <div className="w-12 h-12 flex-1 rounded-full bg-slate-200/50 text-blue-600  flex justify-center items-center uppercase font-medium text-xl">
                     {review.user.name.slice(0, 1)}
                   </div>
                   <div className="">

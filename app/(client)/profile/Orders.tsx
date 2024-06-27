@@ -48,10 +48,10 @@ export const Orders = () => {
         {orders.map((order) => (
           <div
             key={order.id}
-            className="flex justify-between items-center pb-8 border-b border-b-slate-200 mt-14"
+            className="flex justify-between items-center pb-8 border-b border-b-slate-200 mt-14 sm:flex-wrap sm:gap-y-4"
           >
-            <div className="flex items-center gap-x-6">
-              <div className="flex items-center gap-x-4">
+            <div className="flex items-center gap-6 sm:flex-wrap">
+              <div className="flex items-center gap-4 sm:flex-wrap">
                 {order.orderItems.map((item) => (
                   <div key={item.id} className="flex items-center gap-x-1">
                     <div className="h-10 w-10 rounded-full bg-W100 flex justify-center items-center">

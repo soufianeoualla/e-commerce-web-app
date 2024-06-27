@@ -8,7 +8,7 @@ export const NewsLetter = () => {
   const isAuthPage = pathname.includes("auth");
   return (
     <div className={cn("bg-W100 mb-[74px] ", isAuthPage && "hidden")}>
-      <div className="max-w-[1116px] mx-auto flex justify-between items-center flex-wrap h-[200px] sm:px-4">
+      <div className="max-w-[1116px] mx-auto flex justify-between items-center flex-wrap h-[200px] sm:p-4 sm:h-auto">
         <div className="space-y-6">
           <h1 className="text-neutral-black text-2xl font-bold">
             Join Our Newsletter

@@ -66,7 +66,7 @@ const Filters = ({
   };
 
   return (
-    <div className="border rounded-md sticky self-start top-0 p-4 pb-8">
+    <div className="border rounded-md sticky self-start top-0 p-4 pb-8 sm:static sm:w-[70%] sm:mx-auto">
       <div className="">
         <h3 className="text-neutral-black font-medium">Categories</h3>
         <div className="mt-8 capitalize">

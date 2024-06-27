@@ -38,7 +38,7 @@ export const Order = () => {
   const subtotal = userCart.total;
 
   return (
-    <div className="w-[372px] text-neutral-500">
+    <div className="w-[372px] text-neutral-500 sm:border sm:border-slate-200 rounded sm:p-4 sm:w-full">
       <h1 className="text-neutral-black font-bold mb-10 text-[16px]">
         Your Order
       </h1>

@@ -70,9 +70,9 @@ export const CheckoutForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleCheckout)}
-        className=" w-full flex items-start justify-between"
+        className=" w-full flex items-start justify-between sm:flex-col sm:justify-center sm:items-center sm:gap-10"
       >
-        <div className="w-[640px] pr-28 border-r border-slate-300 ">
+        <div className="w-[640px] pr-28 border-r border-slate-300 sm:border-0 sm:pr-0 sm:w-full ">
           <h1 className="text-neutral-black font-bold text-[16px] mb-16">
             Shipping Address
           </h1>

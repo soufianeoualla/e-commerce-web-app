@@ -12,7 +12,7 @@ export const ImageSlider = ({ images }: Props) => {
   const [imageSlide, setImageSlide] = useState<number>(0);
 
   return (
-    <div className="w-[534px] h-[574px] flex justify-center items-center bg-W100 rounded-md relative ">
+    <div className="w-[534px] sm:w-full h-[574px] sm:h-[500px] flex justify-center items-center bg-W100 rounded-md relative ">
       {images.map((image, index) => (
         <div key={image.id}>
           {imageSlide === index && (

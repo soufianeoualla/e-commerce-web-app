@@ -13,12 +13,12 @@ type Props = {
 export const ProductDetails = ({ description, productId,reviews }: Props) => {
   const [isReviewsSelected, setIsReviewsSelected] = useState<boolean>(false);
   return (
-    <div className="flex  gap-x-24 mb-[176px]">
-      <div className="space-y-4">
+    <div className="flex  gap-x-24 mb-[176px] sm:flex-col sm:gap-y-8">
+      <div className="grid gap-4 sm:grid-cols-2">
         <button
           onClick={() => setIsReviewsSelected(false)}
           className={cn(
-            `w-[241px] text-neutral-500  rounded-md flex items-center px-4 gap-x-2.5 h-11`,
+            `w-[241px] sm:w-full text-neutral-500  rounded-md flex items-center px-4 gap-x-2.5 h-11`,
             !isReviewsSelected && "bg-W100 text-neutral-black font-medium"
           )}
         >
@@ -28,7 +28,7 @@ export const ProductDetails = ({ description, productId,reviews }: Props) => {
         <button
           onClick={() => setIsReviewsSelected(true)}
           className={cn(
-            `w-[241px] text-neutral-500  rounded-md flex items-center px-4 gap-x-2.5 h-11`,
+            `w-[241px] sm:w-full text-neutral-500  rounded-md flex items-center px-4 gap-x-2.5 h-11`,
             isReviewsSelected && "bg-W100 text-neutral-black font-medium"
           )}
         >
@@ -42,7 +42,7 @@ export const ProductDetails = ({ description, productId,reviews }: Props) => {
             <h3 className="text-neutral-black font-semibold mb-6 text-[16px]">
               Details
             </h3>
-            <div dangerouslySetInnerHTML={{ __html: description }} />
+            <div className="px-4" dangerouslySetInnerHTML={{ __html: description }} />
           </div>
         )}
         {isReviewsSelected && <Reviews productId={productId} reviews={reviews}  />}

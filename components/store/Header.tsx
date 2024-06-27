@@ -29,7 +29,6 @@ export const Header = () => {
       </div>
       <div className="max-w-[1116px] mx-auto flex justify-between items-center h-[84px] px-3">
         <div className="flex items-center gap-x-4">
-          
           <Link href={"/"} className="flex items-center gap-x-2">
             <Image src={"/logo.svg"} alt="logo" width={20} height={20} />
             <b className="text-neutral-black font-bold text-lg -tracking-wide ">
@@ -40,9 +39,11 @@ export const Header = () => {
         <div className="sm:hidden">
           <NavLinks />
         </div>
-        <MobileMenu  />
+        <MobileMenu />
         <div className="flex items-center gap-x-8">
-          <Search />
+          <div className="sm:hidden">
+            <Search />
+          </div>
           <div className="flex items-center gap-x-8 text-neutral-600 sm:gap-x-4">
             <CartSheet />
             <Link

@@ -18,7 +18,7 @@ type Props = {
 
 export const Product = ({ product, reviews }: Props) => {
   const [selectedColor, setSelectedColor] = useState<number>(0);
-  const [selectedSize, setSelectedSize] = useState<number | undefined>();
+  const [selectedSize, setSelectedSize] = useState<number >(0);
   const [quantity, setQuantity] = useState<number>(1);
   const [error, setError] = useState<string | undefined>("");
 
@@ -43,9 +43,9 @@ export const Product = ({ product, reviews }: Props) => {
       : 0;
 
   return (
-    <div className="flex justify-between items-center gap-x-28 mb-[146px]">
+    <div className="flex justify-between items-center gap-x-28 gap-y-8 mb-[146px] sm:flex-col sm:justify-center">
       <ImageSlider images={product.images} />
-      <div className="w-[438px]">
+      <div className="w-[438px] sm:w-full">
         <div className="flex justify-between items-center gap-x-28">
           <h1 className="text-neutral-black text-2xl font-bold">
             {product?.title}

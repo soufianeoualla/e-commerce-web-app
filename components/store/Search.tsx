@@ -10,7 +10,7 @@ export const Search = () => {
     router.push(`/search?query=${query}`);
   };
   return (
-    <div className="search relative text-neutral-500 sm:hidden">
+    <div className="search relative text-neutral-500 sm:w-full  ">
       <input
         onKeyDown={(e) => {
           if (e.key === "Enter") {
@@ -19,7 +19,7 @@ export const Search = () => {
         }}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search products "
-        className="border border-slate-200 h-11 max-w-[265px] rounded-md pl-14 placeholder:text-neutral-500 focus:outline-none focus:border-neutral-black/50"
+        className="border border-slate-200 h-11 w-[265px] sm:w-full  rounded-md pl-14 placeholder:text-neutral-500 focus:outline-none focus:border-neutral-black/50"
       />
       <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2" />
     </div>

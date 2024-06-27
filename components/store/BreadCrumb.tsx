@@ -18,7 +18,7 @@ export function BreadcrumbWithCustomSeparator({ classname }: Props) {
   const routes = pathname.split("/"); 
 
   return (
-    <Breadcrumb className={cn("py-6 bg-W100", classname)}>
+    <Breadcrumb className={cn("py-6 bg-W100 sm:px-4", classname)}>
       <BreadcrumbList className="mx-auto max-w-[1116px]">
         {routes.map((item, index) => {
           const isLast = index === routes.length - 1;

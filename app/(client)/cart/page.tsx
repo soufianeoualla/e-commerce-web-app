@@ -12,17 +12,17 @@ const CartPage = () => {
   const cartItems = cart.cartItems;
 
   return (
-    <main>
-      <div className="h-40 bg-W100 mb-12  ">
+    <main >
+      <div className="h-40 bg-W100 mb-12   ">
         <div className="max-w-[1116px] mx-auto space-y-2 pt-12  ">
-          <h1 className="text-neutral-black text-2xl font-bold">Cart</h1>
+          <h1 className="text-neutral-black text-2xl font-bold sm:px-4">Cart</h1>
           <BreadcrumbWithCustomSeparator classname="p-0 bg-transparent" />
         </div>
       </div>
-      <div className="max-w-[1116px] mx-auto flex justify-between mb-12 gap-[128px]">
+      <div className="max-w-[1116px] mx-auto flex justify-between mb-12 gap-[128px] sm:flex-col sm:gap-10 sm:px-4 sm:justify-center sm:items-center">
         {cart.cartItems.length > 0 ? (
           <>
-            <div className="w-[628px]">
+            <div className="w-[628px] sm:w-full">
               <h3 className="text-neutral-black font-semibold mb-3  text-[16px]">
                 Your cart
               </h3>

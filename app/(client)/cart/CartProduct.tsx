@@ -20,8 +20,8 @@ export const CartProductCard = ({
   const {  handleQuantity, deleteProduct } = useContext(CartContext);
 
   return (
-    <div className="flex justify-between items-center w-full">
-      <div className={cn("flex items-center gap-x-8", viewCart && "gap-x-4")}>
+    <div className="flex justify-between items-center w-full  sm:relative">
+      <div className={cn("flex items-center gap-x-8 sm:gap-x-4", viewCart && "gap-x-4")}>
         <div className="flex justify-center items-center bg-W100 rounded-sm w-20 h-20">
           <Image
             src={ cartItem.product.images[0].imageSrc}
@@ -31,7 +31,7 @@ export const CartProductCard = ({
           />
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 sm:mb-4">
           <h1 className="text-neutral-black font-medium">{cartItem.product.title}</h1>
           <div className="text-neutral-500 text-xs">
             <div className="flex items-center gap-x-2">
@@ -53,11 +53,11 @@ export const CartProductCard = ({
         </p>
       )}
 
-      <div className={cn("flex items-center", viewCart && "hidden")}>
-        <strong className="text-neutral-black  font-medium">
+      <div className={cn("flex items-center ", viewCart && "hidden")}>
+        <strong className="text-neutral-black  font-medium absolute bottom-1 left-24">
           ${cartItem.product.price}
         </strong>
-        <div className="flex justify-between items-center w-[107px] h-10 border border-slate-200 rounded-sm px-3 ml-8">
+        <div className="flex justify-between items-center w-[107px] h-10 border border-slate-200 rounded-sm px-3 ml-8 sm:ml-2">
           <button
             onClick={() => handleQuantity!("minus", cartItem.id)}
             className="w-5 h-5 flex justify-center items-center"
@@ -80,7 +80,7 @@ export const CartProductCard = ({
         </div>
         <button
           onClick={() => deleteProduct!(cartItem.id)}
-          className="flex justify-center items-center w-10 h-10 rounded-sm bg-W100 ml-4 hover:bg-W200"
+          className="flex justify-center items-center w-10 h-10 rounded-sm bg-W100 ml-4 hover:bg-W200 sm:absolute sm:-top-6 sm:right-0"
         >
           <X className="w-4 h-4 text-neutral-600" />
         </button>

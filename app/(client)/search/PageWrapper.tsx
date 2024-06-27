@@ -90,7 +90,7 @@ export const PageWrapper = ({
   }, [filteredProducts, sort]);
 
   return (
-    <div className="py-2 w-full ">
+    <div className="py-2 w-full sm:px-4 ">
       <b className=" text-neutral-black">Applied Filters:</b>
       <div className="flex items-center gap-x-2">
         {categories &&
@@ -124,7 +124,10 @@ export const PageWrapper = ({
           </SelectContent>
         </Select>
       </div>
-      <ProductsList products={sortedProducts} classname="grid grid-cols-3" />
+      <ProductsList
+        products={sortedProducts}
+        classname="grid grid-cols-3 sm:flex sm:flex-col sm:justify-center sm:items-center "
+      />
     </div>
   );
 };

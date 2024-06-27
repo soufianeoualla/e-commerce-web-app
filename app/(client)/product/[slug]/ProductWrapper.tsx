@@ -59,7 +59,7 @@ export const ProductWrapper = () => {
     );
 
   return (
-    <div>
+    <div className="sm:px-4">
       <Product product={product} reviews={productsReviews}  />
       <ProductDetails description={product?.description} productId={product.id} reviews={productsReviews}  />
       <div>

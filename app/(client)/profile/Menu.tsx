@@ -38,7 +38,7 @@ export const Menu = ({ selectedMenu, setSelectedMenu }: Props) => {
     },
   ];
   return (
-    <aside className="w-[232px] mt-14 space-y-2">
+    <aside className="w-[232px] mt-14 space-y-2 sm:grid sm:grid-cols-2 sm:w-full sm:gap-x-2 ">
       {menu.map((item, index) => (
         <button
           onClick={() => setSelectedMenu(index)}
