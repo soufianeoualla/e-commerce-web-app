@@ -1,13 +1,12 @@
 "use client";
 import { Review, SingleProduct } from "@/lib/interfaces";
-import { Heart, Minus, Plus, Share2 } from "lucide-react";
+import { Minus, Plus, Share2 } from "lucide-react";
 import React, { useContext, useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import { ImageSlider } from "./ImageSlider";
 import { cn, sizes } from "@/lib/utils";
 import { CartContext } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
-import { WishlistContext } from "@/context/WishlistContext";
 import { AddToCartButton } from "./addToCartButton";
 
 type Props = {
