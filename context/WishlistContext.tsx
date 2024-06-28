@@ -38,9 +38,11 @@ export const WishlistProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (status === "authenticated") {
       const fetchData = async () => {
-        const cartData = await getUserWishlist();
+        const wishlistData = await getUserWishlist();
         // @ts-ignore
-        setWishlist(cartData);
+        if (wishlistData) {
+          setWishlist(wishlistData);
+        }
       };
       fetchData();
       localStorage.removeItem("wishlist");

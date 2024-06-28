@@ -17,7 +17,7 @@ export const AddToCartButton = ({ product, handleAddToCart }: Props) => {
     <div className=" flex  items-center gap-x-4 mb-3 ">
       <button
         onClick={handleAddToCart}
-        className="bg-neutral-black  h-11 w-[284px] text-white font-medium rounded-md hover:bg-opacity-80"
+        className="bg-neutral-black  h-11 w-[284px] sm:w-[250px] text-white font-medium rounded-md hover:bg-opacity-80"
       >
         Add to cart
       </button>

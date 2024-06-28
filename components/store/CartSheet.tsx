@@ -38,7 +38,7 @@ export const CartSheet = () => {
           )}
         </div>
       </SheetTrigger>
-      <SheetContent className="sm:w-full ">
+      <SheetContent className="w-[470px] sm:w-full ">
         <SheetHeader className="mb-10">
           <SheetTitle>Cart ({quantity}) </SheetTitle>
         </SheetHeader>

@@ -80,7 +80,7 @@ export const getFeaturedProducts = async () => {
 export const getUserCart = async () => {
   const session = await auth();
   const user = session?.user;
-  if(!user) return null
+  if (!user) return null;
 
   try {
     const cureentUser = await db.user.findUnique({

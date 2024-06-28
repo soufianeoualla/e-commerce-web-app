@@ -23,7 +23,7 @@ export const Header = () => {
   }, []);
   return (
     <header>
-      <div className="bg-neutral-black flex justify-center items-center h-10 text-white gap-x-2 text-sm">
+      <div className="bg-neutral-black flex justify-center items-center h-10 text-white gap-x-2 text-sm sm:px-4">
         Get 25% OFF on your first order.{" "}
         <span className="font-medium"> Order Now</span>
       </div>

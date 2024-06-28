@@ -63,11 +63,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       const fetchData = async () => {
         const cartData = await getUserCart();
         // @ts-ignore
-        setCart(cartData);
+        if (cartData) {
+          setCart(cartData);
+        }
       };
       fetchData();
     }
-  }, [status,trigger]);
+  }, [status, trigger]);
 
   useEffect(() => {
     if (status !== "authenticated") {
@@ -75,14 +77,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [cart, status]);
 
-  const addProduct = (
+  const addProduct = async (
     product: SingleProduct,
     quantity: number,
     size: string,
     color: string
   ) => {
     if (status === "authenticated") {
-      addtoCart(product, color, size, quantity);
+      const data = await addtoCart(product, color, size, quantity);
+      if (data?.error) {
+        toast.error(data.error);
+      }
     } else {
       const newState = { ...cart };
       const existingItem = newState.cartItems.find(

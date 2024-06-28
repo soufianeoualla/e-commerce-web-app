@@ -165,7 +165,7 @@ export const Reviews = ({ productId, reviews }: Props) => {
           <div>
             <div className="flex justify-end mt-6 mb-2">
               <Select onValueChange={(value) => setSort(value)}>
-                <SelectTrigger className="w-[150px]  border-none  text-neutral-black font-medium ">
+                <SelectTrigger className="w-[150px] sm:w-[120px]  border-none  text-neutral-black font-medium ">
                   <SelectValue placeholder="Sort By" />
                 </SelectTrigger>
                 <SelectContent>
@@ -178,36 +178,35 @@ export const Reviews = ({ productId, reviews }: Props) => {
             </div>
             <hr />
             {sortedReviews.map((review) => (
-              <div
-                key={review.id}
-                className="flex items-start justify-between mt-6"
-              >
-                <div className="flex items-start gap-x-4 text-neutral-500">
-                  <div className="w-12 h-12 flex-1 rounded-full bg-slate-200/50 text-blue-600  flex justify-center items-center uppercase font-medium text-xl">
-                    {review.user.name.slice(0, 1)}
+              <div key={review.id} className="sm:text-[13px]">
+                <div className="flex items-start justify-between mt-6">
+                  <div className="flex items-start gap-x-4 text-neutral-500 ">
+                    <span className="w-12 h-12 sm:w-8 sm:h-8  rounded-full bg-slate-200/50 text-blue-600  flex justify-center items-center uppercase font-medium text-xl sm:text-base">
+                      {review.user.name.slice(0, 1)}
+                    </span>
+                    <div className="">
+                      <b className="text-neutral-black capitalize">
+                        {review.user.name}
+                      </b>
+                      <p className="mt-2 mb-4 text-xs uppercase ">
+                        {timeAgo(review.createdAt)}
+                      </p>
+                    </div>
                   </div>
-                  <div className="">
-                    <b className="text-neutral-black capitalize">
-                      {review.user.name}
-                    </b>
-                    <p className="mt-2 mb-4 text-xs uppercase">
-                      {timeAgo(review.createdAt)}
-                    </p>
-                    <p>{review.text}</p>
+                  <div className=" flex items-center">
+                    {stars.map((star, index) => (
+                      <Star
+                        key={index}
+                        strokeWidth={1.5}
+                        className={`text-neutral-500 cursor-pointer sm:text-xs  ${
+                          review.rating >= star &&
+                          "fill-neutral-black text-neutral-black"
+                        }`}
+                      />
+                    ))}
                   </div>
                 </div>
-                <div className=" flex items-center">
-                  {stars.map((star, index) => (
-                    <Star
-                      key={index}
-                      strokeWidth={1.5}
-                      className={`text-neutral-500 cursor-pointer  ${
-                        review.rating >= star &&
-                        "fill-neutral-black text-neutral-black"
-                      }`}
-                    />
-                  ))}
-                </div>
+                <p className="text-neutral-500 ml-16">{review.text}</p>
               </div>
             ))}
           </div>

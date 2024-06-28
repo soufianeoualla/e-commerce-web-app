@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 import { db } from "@/db/db";
 import { getUserCart } from "@/db/queries";
 import { SingleProduct } from "@/lib/interfaces";
-import { revalidatePath } from "next/cache";
+
 export const addtoCart = async (
   product: SingleProduct,
   color: string,
@@ -12,22 +12,36 @@ export const addtoCart = async (
   quantity: number
 ) => {
   const session = await auth();
-  if (!session) return;
-
+  const user = session?.user;
+  if (!user) return { error: "You are not logged in" };
+  const userCart = await db.cart.findFirst({
+    where: {
+      userId: user.id,
+    },
+  });
+  if (!userCart) {
+    await db.cart.create({
+      data: {
+        total: 0.0,
+        quantity: 0,
+        userId: user.id!,
+        cartItems: {},
+      },
+    });
+  }
   const dbProduct = await db.product.findUnique({
     where: { id: product.id },
   });
 
   if (!dbProduct || dbProduct.quantity < quantity) {
-    throw new Error("Product not available or insufficient stock");
+    return { error: '"Product not available or insufficient stock' };
   }
-  const cart = await getUserCart();
 
-  if (!cart) return;
+  let cart = await getUserCart();
 
   let cartItem = await db.cartItem.findFirst({
     where: {
-      cartId: cart.id,
+      cartId: cart!.id,
       productId: product.id,
       color,
       size,
@@ -47,7 +61,7 @@ export const addtoCart = async (
           size,
           quantity,
           productId: product.id,
-          cartId: cart.id,
+          cartId: cart!.id,
         },
       });
     }
@@ -55,14 +69,13 @@ export const addtoCart = async (
 
   await db.cart.update({
     where: {
-      id: cart.id,
+      id: cart!.id,
     },
     data: {
-      quantity: cart.quantity + quantity,
-      total: cart.total + quantity * product.price,
+      quantity: cart!.quantity + quantity,
+      total: cart!.total + quantity * product.price,
     },
   });
-  revalidatePath(`/product/${product.slug}`);
 };
 
 export const handleCartItemQuantity = async (
@@ -155,5 +168,4 @@ export const deleteCartItem = async (id: string) => {
       total: cart.total - exisingCartItem.quantity * product?.price,
     },
   });
-  revalidatePath("/cart");
 };
