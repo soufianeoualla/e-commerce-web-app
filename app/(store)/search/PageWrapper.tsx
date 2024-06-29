@@ -47,11 +47,12 @@ export const PageWrapper = ({
         const data = await getProductBySearch(title);
         setqueriedProduct(data);
       } else if (category) {
-        const data = await getProductsByCategory(category);
+        const data = await getProductsByCategory(decodeURI(category));
         setqueriedProduct(data);
       }
       const products = await getAllProducts();
       setallProducts(products);
+      console.log(products.map(item=>item.id));
     };
     getData();
   }, [title, category]);

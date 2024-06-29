@@ -69,7 +69,7 @@ export const Customers = ({ customers }: Props) => {
           <Loader className="animate-spin  text-[#4078FF]" />
         </div>
       ) : (
-        <ResponsiveContainer width={274} height={46} className={"mt-11"}>
+        <ResponsiveContainer height={46} className={"mt-11 w-full"}>
           <LineChart data={customerCounts}>
             <Tooltip content={<CustomTooltip color="text-[#4078FF]" />} />{" "}
             <Line

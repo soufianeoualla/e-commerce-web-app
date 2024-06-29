@@ -2,7 +2,7 @@
 
 import { auth } from "@/auth";
 import { db } from "@/db/db";
-import { getUserCart, isFirstOrder } from "@/db/queries";
+import { getUserCart } from "@/db/queries";
 import { stripe } from "@/lib/stripe";
 import { ShippingAddressSchema } from "@/schemas";
 import { ShippingAddress } from "@prisma/client";
@@ -21,10 +21,8 @@ export const createCheckoutSession = async (
   const user = session?.user;
   const cart = await getUserCart();
   if (!cart) return { error: "cart is empty" };
-  const firstOrder = await isFirstOrder();
   const shipping = cart.total >= 100 ? 0 : 20;
-  const firstOrder0FF = firstOrder ? cart.total * 0.25 : 0;
-  const totalPrice = cart.total - firstOrder0FF + shipping;
+  const totalPrice = cart.total + shipping;
 
   const existingOrder = await db.order.findFirst({
     where: {
@@ -112,7 +110,6 @@ export const createCheckoutSession = async (
       userId: user?.id!,
       orderId: order.id,
       totalPrice: totalPrice,
-      firstOrderDiscount: firstOrder0FF,
     },
 
     line_items: lineItems,

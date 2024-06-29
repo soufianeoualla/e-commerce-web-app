@@ -24,9 +24,12 @@ const main = async () => {
 
   const products = [
     { id: "0f4a6640-7ba6-4cc0-9d16-af991ab91fdf" },
-    { id: "51d004d5-52ff-43bb-a944-a667077babb3" }, 
+    { id: "51d004d5-52ff-43bb-a944-a667077babb3" },
     { id: "7a1690eb-34b9-40c8-9305-8e8425eb6db6" },
     { id: "1f149a02-0ae7-4dee-bf62-a4ead6f2d964" },
+    { id: "a6222a19-d823-4d66-8b73-df66b2ed4f09" },
+    { id: "14073d32-fab2-4af6-aece-023dcfaf06fb" },
+    { id: "72449f8b-8c0e-4baa-bfac-5a5a698adaf1" },
   ];
 
   const orders = await Promise.all(
@@ -51,7 +54,7 @@ const main = async () => {
         data: {
           updatedAt: faker.date.between({
             from: "2024-06-01T00:00:00.000Z",
-            to: "2024-06-14T00:00:00.000Z",
+            to: "2024-06-29T00:00:00.000Z",
           }),
           ref: faker.commerce.isbn(),
           userId: userId,

@@ -3,9 +3,7 @@ import Image from "next/image";
 
 export const Banner = () => {
   return (
-    <div
-      className="bg-W100 mt-40  mb-36 pb-6 sm:px-4"
-    >
+    <div className="bg-W100 mt-40  mb-36 pb-6 sm:px-4">
       <div className="max-w-[1116px] mx-auto flex justify-between items-center sm:flex-col-reverse">
         <div className="space-y-8 ">
           <div className="space-y-6">
@@ -18,7 +16,7 @@ export const Banner = () => {
               clothing categories.
             </p>
           </div>
-          <LinkButton href="/" label="Start Browsing" />
+          <LinkButton href="/search" label="Start Browsing" />
         </div>
 
         <div>

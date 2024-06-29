@@ -458,21 +458,3 @@ export const getBestSellingProducts = async () => {
     return null;
   }
 };
-
-export const isFirstOrder = async () => {
-  const session = await auth();
-  const user = session?.user;
-  if (!user) return null;
-  try {
-    const order = await db.order.findFirst({
-      where: {
-        userId: user.id,
-        isPaid: true,
-      },
-    });
-    return !order;
-  } catch (error) {
-    console.log(error);
-    return true;
-  }
-};

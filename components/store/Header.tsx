@@ -1,5 +1,5 @@
 "use client";
-import { CircleUserRound, Menu } from "lucide-react";
+import { CircleUserRound } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Search } from "./Search";
@@ -24,7 +24,7 @@ export const Header = () => {
   return (
     <header>
       <div className="bg-neutral-black flex justify-center items-center h-10 text-white gap-x-2 text-sm sm:px-4">
-        Get 25% OFF on your first order.{" "}
+        Get free shipping on orders above 100$.{" "}
         <span className="font-medium"> Order Now</span>
       </div>
       <div className="max-w-[1116px] mx-auto flex justify-between items-center h-[84px] px-3">

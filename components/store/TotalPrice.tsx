@@ -1,24 +1,13 @@
 "use client";
-import { isFirstOrder } from "@/db/queries";
-import {  formatPrice } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
+import { formatPrice } from "@/lib/utils";
 
 type Props = {
   subtotal: number;
 };
 
 const TotalPrice = ({ subtotal }: Props) => {
-  const [firstOrder, setfirstOrder] = useState<boolean | null>();
-  useEffect(() => {
-    const getData = async () => {
-      const data = await isFirstOrder();
-      setfirstOrder(data);
-    };
-    getData();
-  }, []);
   const shipping = subtotal >= 100 ? 0 : 20;
-  const firstOrder0FF = firstOrder ? subtotal * 0.25 : 0;
-  const total = subtotal  - firstOrder0FF + shipping;
+  const total = subtotal + shipping;
 
   return (
     <>
@@ -34,12 +23,7 @@ const TotalPrice = ({ subtotal }: Props) => {
           {subtotal >= 100 ? "FREE" : "$20.00"}
         </span>
       </div>
-      {firstOrder && (
-        <div className="flex justify-between items-center mt-3 mb-6">
-          First Order:
-          <span className="text-neutral-black font-medium">25% OFF</span>
-        </div>
-      )}
+
       <hr className="border-slate-200" />
       <div className="flex justify-between items-center mt-6 text-neutral-black font-medium">
         Total

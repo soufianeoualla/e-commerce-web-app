@@ -13,7 +13,7 @@ import { ShoppingCart } from "lucide-react";
 import { useContext } from "react";
 import { CartContext } from "@/context/CartContext";
 import Link from "next/link";
-import { CartProductCard } from "@/app/(client)/cart/CartProduct";
+import { CartProductCard } from "@/app/(store)/cart/CartProduct";
 
 export const CartSheet = () => {
   const { cart } = useContext(CartContext);
@@ -38,7 +38,7 @@ export const CartSheet = () => {
           )}
         </div>
       </SheetTrigger>
-      <SheetContent className="w-[470px] sm:w-full ">
+      <SheetContent className="w-[400px] sm:w-full ">
         <SheetHeader className="mb-10">
           <SheetTitle>Cart ({quantity}) </SheetTitle>
         </SheetHeader>
