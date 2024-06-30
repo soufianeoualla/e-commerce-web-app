@@ -58,13 +58,13 @@ export const OrderSummary = ({
           <p>
             FullName:{" "}
             <span className="text-primary font-medium">
-              {shippingAddress.email}
+              {shippingAddress.fullName}
             </span>
           </p>
           <p>
             Email:{" "}
             <span className="text-primary font-medium">
-              {shippingAddress.fullName}
+              {shippingAddress.email}
             </span>{" "}
           </p>
         </div>
