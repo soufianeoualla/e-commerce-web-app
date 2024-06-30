@@ -29,9 +29,9 @@ export const addProduct = async (
     sizes,
   } = validateFields.data;
 
-  const existingProduct = await db.product.findUnique({
+  const existingProduct = await db.product.findFirst({
     where: {
-      slug,
+      OR: [{ slug, sku }],
     },
   });
 
