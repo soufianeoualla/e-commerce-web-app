@@ -26,12 +26,8 @@ export default auth(async (req, res) => {
   }
 
   // If the user is not logged in
-  if (!isLoggedIn) {
-    if (isAuthRoute || isPublicRoute) {
-      return;
-    } else {
-      return Response.redirect(new URL("/auth/login", origin));
-    }
+  if (!isLoggedIn && (isAuthRoute || isPublicRoute)) {
+    return;
   }
 
   // If the user is logged in and trying to access an auth route, redirect to the default link

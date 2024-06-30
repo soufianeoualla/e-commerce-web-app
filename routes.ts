@@ -5,7 +5,7 @@ export const publicRoutes = [
   "/",
   "/cart",
   "/search",
-  "/product",
+  "/product/:id",
   "/auth/verification",
   "/auth/forgot-password",
   "/auth/reset-password",
