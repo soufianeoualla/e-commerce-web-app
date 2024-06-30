@@ -2,10 +2,11 @@
 import { DeleteModal } from "@/components/Dashboard/DeleteModal";
 import Pagination from "@/components/Dashboard/Pagination";
 import { Button } from "@/components/ui/button";
+import { dataUpdate } from "@/context/dataUpdate";
 import { getAllCustomers } from "@/db/queries";
 import { ShippingAddress } from "@prisma/client";
 import { Loader, SearchIcon, Trash2 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 const Page = () => {
   const [id, setId] = useState<string>("");
@@ -16,6 +17,7 @@ const Page = () => {
   const lastItemIndex = currentPage * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
   const [query, setQuery] = useState<string>("");
+  const { trigger } = useContext(dataUpdate);
 
   useEffect(() => {
     const getData = async () => {
@@ -24,7 +26,7 @@ const Page = () => {
       console.log(data);
     };
     getData();
-  }, []);
+  }, [trigger]);
 
   if (!customers)
     return (

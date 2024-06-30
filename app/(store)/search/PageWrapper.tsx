@@ -46,16 +46,16 @@ export const PageWrapper = ({
       if (title) {
         const data = await getProductBySearch(title);
         setqueriedProduct(data);
-      } else if (category) {
+      } else if (category && categories.length === 0) {
         const data = await getProductsByCategory(decodeURI(category));
         setqueriedProduct(data);
       }
       const products = await getAllProducts();
       setallProducts(products);
-      console.log(products.map(item=>item.id));
+      console.log(products.map((item) => item.id));
     };
     getData();
-  }, [title, category]);
+  }, [title, category, categories]);
 
   const products = useMemo(
     () => queriedProduct || allProducts || [],

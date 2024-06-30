@@ -2,10 +2,11 @@
 import { DeleteModal } from "@/components/Dashboard/DeleteModal";
 import Pagination from "@/components/Dashboard/Pagination";
 import { Button } from "@/components/ui/button";
+import { dataUpdate } from "@/context/dataUpdate";
 import { getAllReviews } from "@/db/queries";
 import { Review } from "@/lib/interfaces";
 import { Loader, SearchIcon, Trash2 } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 const Page = () => {
   const [reviews, setReviews] = useState<Review[] | null>();
@@ -16,6 +17,7 @@ const Page = () => {
   const lastItemIndex = currentPage * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
   const [query, setQuery] = useState<string>("");
+  const { trigger } = useContext(dataUpdate);
 
   useEffect(() => {
     const getData = async () => {
@@ -23,7 +25,7 @@ const Page = () => {
       setReviews(data);
     };
     getData();
-  }, []);
+  }, [trigger]);
 
   if (!reviews)
     return (

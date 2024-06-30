@@ -73,7 +73,9 @@ const Filters = ({
           {categoriesData?.map((item, index) => (
             <>
               <div
-                onClick={() => handleCategories(item.title)}
+                onClick={() => {handleCategories(item.title)
+                  
+                }}
                 key={item.id}
                 className="text-neutral-600 flex items-center gap-x-2.5 my-3 cursor-pointer "
               >

@@ -3,12 +3,13 @@ import { Loader, SearchIcon, SquarePen, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { getAllProducts } from "@/db/queries";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SingleProduct } from "@/lib/interfaces";
 import { Button } from "@/components/ui/button";
 import { DeleteModal } from "@/components/Dashboard/DeleteModal";
 import { useRouter } from "next/navigation";
 import Pagination from "@/components/Dashboard/Pagination";
+import { dataUpdate } from "@/context/dataUpdate";
 
 const Page = () => {
   const [products, setProducts] = useState<
@@ -22,6 +23,7 @@ const Page = () => {
   const lastItemIndex = currentPage * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
   const router = useRouter();
+  const { trigger } = useContext(dataUpdate);
 
   useEffect(() => {
     const getData = async () => {
@@ -29,7 +31,7 @@ const Page = () => {
       setProducts(data);
     };
     getData();
-  }, [query]);
+  }, [query, trigger]);
 
   if (!products)
     return (

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BestSelling } from "./BestSelling";
 import { Customers } from "./Customers";
 import { Sales } from "./Sales";
@@ -16,6 +16,7 @@ import { Loader, Trash2 } from "lucide-react";
 import { Order } from "@/lib/interfaces";
 import { Button } from "@/components/ui/button";
 import { DeleteModal } from "@/components/Dashboard/DeleteModal";
+import { dataUpdate } from "@/context/dataUpdate";
 
 type Sale = {
   amount: number;
@@ -44,6 +45,7 @@ const Page = () => {
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const [goal, setGoal] = useState<number | undefined | null>();
   const [id, setId] = useState<string>("");
+  const {  trigger } = useContext(dataUpdate);
   useEffect(() => {
     const getData = async () => {
       const saleData = await getAllSales();
@@ -58,7 +60,7 @@ const Page = () => {
       setGoal(ordersGoal?.goal);
     };
     getData();
-  }, []);
+  }, [trigger]);
 
   const paidOrders = orders?.filter((item) => item.isPaid === true);
 

@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useState, useTransition } from "react";
+import { useContext, useEffect, useState, useTransition } from "react";
 import { Loader, SearchIcon, X } from "lucide-react";
 import { AddCategory } from "./AddCategory";
 import { getAllCategories } from "@/db/queries";
 import { Category } from "@prisma/client";
 import { deleteCategory } from "@/actions/dashboard";
 import toast from "react-hot-toast";
+import { dataUpdate } from "@/context/dataUpdate";
 
 const Page = () => {
   const [categories, setCategories] = useState<Category[] | null | undefined>(
@@ -13,6 +14,7 @@ const Page = () => {
   );
   const [isPending, startTransition] = useTransition();
   const [query, setQuery] = useState<string>("");
+  const { trigger } = useContext(dataUpdate);
 
   useEffect(() => {
     const getData = async () => {
@@ -20,7 +22,7 @@ const Page = () => {
       setCategories(data);
     };
     getData();
-  }, []);
+  }, [trigger]);
 
   if (!categories) {
     return (

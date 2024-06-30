@@ -6,9 +6,10 @@ import { Order } from "@/lib/interfaces";
 import { formatDate, formatPrice } from "@/lib/utils";
 import { Eye, Loader, SearchIcon, Trash2 } from "lucide-react";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { OrderSummary } from "@/components/OrderSummary";
 import Pagination from "@/components/Dashboard/Pagination";
+import { dataUpdate } from "@/context/dataUpdate";
 
 const Page = () => {
   const [orders, setOrders] = useState<Order[] | null | undefined>();
@@ -20,6 +21,7 @@ const Page = () => {
   const lastItemIndex = currentPage * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
   const [query, setQuery] = useState<string>("");
+  const { trigger } = useContext(dataUpdate);
 
   useEffect(() => {
     const getData = async () => {
@@ -27,7 +29,7 @@ const Page = () => {
       setOrders(data);
     };
     getData();
-  }, []);
+  }, [trigger]);
 
   if (!orders)
     return (
