@@ -77,10 +77,16 @@ export const deleteProduct = async (id: string) => {
   const session = await auth();
   const user = session?.user;
   if (!user || user.role !== "admin") return { error: "Your not allowed" };
+
   const product = await db.product.findUnique({
     where: { id },
   });
   if (!product) return { error: "Product does not exist" };
+  await db.image.deleteMany({
+    where: {
+      productId: product.id,
+    },
+  });
   await db.product.delete({
     where: {
       id,
@@ -88,7 +94,6 @@ export const deleteProduct = async (id: string) => {
   });
   return { success: "The product has been deleted successfully" };
 };
-
 
 export const deleteCategory = async (id: number) => {
   const session = await auth();
@@ -152,21 +157,17 @@ export const deleteCustomer = async (id: string) => {
   return { success: "customer has been deleted successfully" };
 };
 
-
-
-export const addUser = async (
-  email:string
-) => {
+export const addUser = async (email: string) => {
   const session = await auth();
   const user = session?.user;
-  if (!user || user.role !== "admin") return {error:'Your not allowed'};
+  if (!user || user.role !== "admin") return { error: "Your not allowed" };
 
   const existingUser = await getUserbyEmail(email);
   if (!existingUser) return { error: "User not found" };
-  
+
   await db.user.update({
-    where:{
-        id:existingUser.id
+    where: {
+      id: existingUser.id,
     },
     data: {
       role: "admin",

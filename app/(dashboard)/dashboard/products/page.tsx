@@ -39,7 +39,6 @@ const Page = () => {
         <Loader className="animate-spin" />
       </div>
     );
-  console.log(products);
   const filtredProducts = query
     ? products.filter((item) => item.title.toLowerCase() === query)
     : products;
