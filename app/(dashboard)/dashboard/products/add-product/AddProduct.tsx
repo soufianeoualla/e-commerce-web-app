@@ -59,6 +59,7 @@ export const AddProduct = () => {
       if (slug) {
         const productData = await getSingleProduct(slug);
         setProduct(productData);
+        console.log(productData);
         if (productData) {
           setIsFeatured(productData.isFeatured);
           form.reset({
@@ -204,9 +205,9 @@ export const AddProduct = () => {
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Tiptap
-                        
                         description={field.value}
                         onChange={field.onChange}
+                        
                       />
                     </FormControl>
 
