@@ -17,6 +17,7 @@ import { Order } from "@/lib/interfaces";
 import { Button } from "@/components/ui/button";
 import { DeleteModal } from "@/components/Dashboard/DeleteModal";
 import { dataUpdate } from "@/context/dataUpdate";
+import Link from "next/link";
 
 type Sale = {
   amount: number;
@@ -114,9 +115,11 @@ const Page = () => {
               <h5 className="text-[16px] text-neutral-black font-semibold">
                 Recent Orders
               </h5>
-              <button className="bg-W100 text-neutral-500 font-medium text-xs rounded-2xl px-3 py-1 hover:bg-neutral-black  hover:text-white">
+              <Link
+                href={'/dashboard/orders'}
+               className="bg-W100 text-neutral-500 font-medium text-xs rounded-2xl px-3 py-1 hover:bg-neutral-black  hover:text-white">
                 View All
-              </button>
+              </Link>
             </div>
 
             <table className="w-full mb-5  ">
