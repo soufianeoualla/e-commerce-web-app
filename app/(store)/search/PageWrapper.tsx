@@ -11,7 +11,7 @@ import {
 import { ProductsList } from "../(HomePage)/ProductsList";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { getProductBySearch, getProductsByCategory } from "@/db/queries";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { colors, sizes } from "@/lib/utils";
 import { getAllProducts } from "@/db/queries";
 import { SingleProduct } from "@/lib/interfaces";
@@ -46,16 +46,16 @@ export const PageWrapper = ({
       if (title) {
         const data = await getProductBySearch(title);
         setqueriedProduct(data);
-      } else if (category && categories.length === 0) {
-        const data = await getProductsByCategory(decodeURI(category));
-        setqueriedProduct(data);
+      } else if (category) {
+        setCategories((prev) =>
+          prev.includes(category) ? [...prev] : [...prev, category]
+        );
       }
       const products = await getAllProducts();
       setallProducts(products);
-      console.log(products.map((item) => item.id));
     };
     getData();
-  }, [title, category, categories]);
+  }, [title, category, setCategories]);
 
   const products = useMemo(
     () => queriedProduct || allProducts || [],

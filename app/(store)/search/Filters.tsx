@@ -5,6 +5,7 @@ import { Category } from "@prisma/client";
 import { Check } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { PriceSlider } from "./PriceSlider";
+import { useRouter, usePathname } from "next/navigation";
 
 type Props = {
   categories: string[];
@@ -28,7 +29,6 @@ const Filters = ({
   values,
 }: Props) => {
   const [categoriesData, setCategoriesData] = useState<Category[]>();
-
   useEffect(() => {
     const getData = async () => {
       const categories = await getAllCategories();
@@ -73,8 +73,8 @@ const Filters = ({
           {categoriesData?.map((item, index) => (
             <>
               <div
-                onClick={() => {handleCategories(item.title)
-                  
+                onClick={() => {
+                  handleCategories(item.title);
                 }}
                 key={item.id}
                 className="text-neutral-600 flex items-center gap-x-2.5 my-3 cursor-pointer "
