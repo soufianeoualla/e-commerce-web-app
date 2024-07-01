@@ -46,7 +46,7 @@ const Page = () => {
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const [goal, setGoal] = useState<number | undefined | null>();
   const [id, setId] = useState<string>("");
-  const {  trigger } = useContext(dataUpdate);
+  const { trigger } = useContext(dataUpdate);
   useEffect(() => {
     const getData = async () => {
       const saleData = await getAllSales();
@@ -62,8 +62,14 @@ const Page = () => {
     };
     getData();
   }, [trigger]);
+  const today = new Date();
 
-  const paidOrders = orders?.filter((item) => item.isPaid === true);
+  const paidOrders = orders?.filter(
+    (item) =>
+      item.isPaid === true &&
+      item.createdAt.getMonth() === today.getMonth() &&
+      item.createdAt.getFullYear() === today.getFullYear()
+  );
 
   return (
     <>
@@ -116,8 +122,9 @@ const Page = () => {
                 Recent Orders
               </h5>
               <Link
-                href={'/dashboard/orders'}
-               className="bg-W100 text-neutral-500 font-medium text-xs rounded-2xl px-3 py-1 hover:bg-neutral-black  hover:text-white">
+                href={"/dashboard/orders"}
+                className="bg-W100 text-neutral-500 font-medium text-xs rounded-2xl px-3 py-1 hover:bg-neutral-black  hover:text-white"
+              >
                 View All
               </Link>
             </div>
